@@ -1,5 +1,4 @@
-﻿
-namespace ProductService.Common.CQRS.Models.Requests.Products;
+﻿namespace ProductService.Common.CQRS.UseCases.Products.GetProductById;
 
 public class GetProductRequest : BaseRequest
 {

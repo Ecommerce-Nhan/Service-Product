@@ -14,6 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Build.Containers" Version="9.0.101" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
@@ -23,10 +30,6 @@
     <ProjectReference Include="..\ProductService.Application\ProductService.Application.csproj" />
     <ProjectReference Include="..\ProductService.Common\ProductService.Common.csproj" />
     <ProjectReference Include="..\ProductService.Infrastructure\ProductService.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Logs\" />
   </ItemGroup>
 
 </Project>

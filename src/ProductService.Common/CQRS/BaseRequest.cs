@@ -1,4 +1,4 @@
-﻿namespace ProductService.Common.CQRS.Models.Requests;
+﻿namespace ProductService.Common.CQRS;
 
 public abstract class BaseRequest
 {

@@ -3,12 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using ProductService.Infrastructure;
 using Microsoft.OpenApi.Models;
 using ProductService.Common.CQRS.Behaviors;
-using System.Reflection;
 using ProductService.Application.Behaviors;
-using ProductService.Common.CQRS.Models.Requests;
-using ProductService.Application.Mappers;
 using ProductService.Application.Features.Commands.Products;
-using ProductService.Common.CQRS.Commands.Products;
+using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
 
 namespace ProductService.Api.Extentions;
 

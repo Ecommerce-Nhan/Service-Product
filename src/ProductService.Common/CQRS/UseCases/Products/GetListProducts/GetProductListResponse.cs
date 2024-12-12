@@ -1,6 +1,6 @@
 ﻿using ProductService.Common.Dtos.Products;
 
-namespace ProductService.Common.CQRS.Models.Responses.Products;
+namespace ProductService.Common.CQRS.UseCases.Products.GetListProducts;
 
 public class GetProductListResponse : BaseResponse
 {

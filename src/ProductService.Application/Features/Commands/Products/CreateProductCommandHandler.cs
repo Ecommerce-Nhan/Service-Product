@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using ProductService.Common.CQRS.Commands.Products;
+using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
 using ProductService.Common.Dtos.Products;
 using ProductService.Domain.Products;
 

@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Common.CQRS.Commands.Products;
-using ProductService.Common.CQRS.Models.Requests.Products;
-using ProductService.Common.CQRS.Queries.Product;
+using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
+using ProductService.Common.CQRS.UseCases.Products.GetProductById;
 using ProductService.Common.Dtos.Products;
 
 namespace ProductService.Api.Controllers;

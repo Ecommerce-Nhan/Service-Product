@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using ProductService.Common.CQRS.Queries.Product;
 
-namespace ProductService.Common.CQRS.Queries.Products.Validators;
+namespace ProductService.Common.CQRS.UseCases.Products.GetProductById;
 
 public class GetProductValidatorQuery : AbstractValidator<GetProductQuery>
 {

@@ -1,4 +1,4 @@
-﻿namespace ProductService.Common.CQRS.Models;
+﻿namespace ProductService.Common.CQRS;
 
 public class ErrorModel
 {

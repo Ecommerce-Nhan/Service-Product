@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using AutoMapper;
 using ProductService.Application.Exceptions;
-using ProductService.Common.CQRS.Queries.Product;
 using ProductService.Common.Dtos.Products;
 using ProductService.Domain.Products;
+using ProductService.Common.CQRS.UseCases.Products.GetProductById;
 
 namespace ProductService.Application.Features.Queries.Products;
 

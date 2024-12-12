@@ -1,4 +1,4 @@
-﻿namespace ProductService.Common.CQRS.Models.Responses;
+﻿namespace ProductService.Common.CQRS;
 
 public abstract class BaseResponse
 {
