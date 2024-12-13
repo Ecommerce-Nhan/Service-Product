@@ -13,12 +13,7 @@ public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        var property = typeof(T).GetProperty("Id");
-        if (property == null || property.PropertyType != typeof(Guid))
-        {
-            return null;
-        }
-        return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x=> (Guid)property.GetValue(x) == id);
+        return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => EF.Property<Guid>(x, "Id") == id);
     }
     public IEnumerable<T> GetAllAsync()
     {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-
+﻿
 namespace ProductService.Common.Dtos.Products;
 
 public record ProductDto(Guid Id,
@@ -8,7 +7,7 @@ public record ProductDto(Guid Id,
                          string? Note,
                          float CostPrice,
                          float UnitPrice,
-                         ImmutableList<string>? Images,
+                         List<string>? Images,
                          Guid CreateBy,
                          DateTime CreateAt,
                          Guid? UpdateBy,
