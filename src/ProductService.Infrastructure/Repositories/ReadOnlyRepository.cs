@@ -1,26 +1,37 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProductService.Common.Filters;
+using ProductService.Common.Wrappers;
 using ProductService.Domain.Abtractions;
-using System.Linq.Expressions;
 
 namespace ProductService.Infrastructure.Repositories;
 
 public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
 {
-    protected readonly AppDbContext _context;
+    protected readonly IQueryable<T> _queryable;
     public ReadOnlyRepository(AppDbContext context)
     {
-        _context = context;
+        _queryable = context.Set<T>().AsNoTracking();
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => EF.Property<Guid>(x, "Id") == id);
+        return await _queryable.FirstOrDefaultAsync(x => EF.Property<Guid>(x, "Id") == id);
     }
-    public IEnumerable<T> GetAllAsync()
+    public async Task<IEnumerable<T>> GetAllAsync()
     {
-        return _context.Set<T>().AsNoTracking().ToList();
+        return await _queryable.ToListAsync();
     }
-    public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
+    public async Task<PagedResponse<List<T>>> GetPageAsync(PaginationFilter pageFilter)
     {
-        return _context.Set<T>().Where(expression);
+        var validFilter = new PaginationFilter(pageFilter.PageNumber, pageFilter.PageSize);
+        var pagedData = await _queryable.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                                        .Take(validFilter.PageSize)
+                                        .ToListAsync();
+        var totalRecords = await _queryable.CountAsync();
+        var response = new PagedResponse<List<T>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
+        var totalPages = ((double)totalRecords / (double)validFilter.PageSize);
+        int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+        response.TotalPages = roundedTotalPages;
+        response.TotalRecords = totalRecords;
+        return response;
     }
 }

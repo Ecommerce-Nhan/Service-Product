@@ -8,4 +8,9 @@ public class ProductNotFoundException : BaseException
         : base($"product with id {id} not found", HttpStatusCode.NotFound)
     {
     }
+
+    public ProductNotFoundException()
+        : base($"product list not found", HttpStatusCode.NotFound)
+    {
+    }
 }

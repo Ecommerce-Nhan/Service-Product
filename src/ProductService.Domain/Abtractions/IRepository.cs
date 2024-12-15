@@ -1,9 +1,8 @@
-﻿using System.Linq.Expressions;
-
-namespace ProductService.Domain.Abtractions;
+﻿namespace ProductService.Domain.Abtractions;
 
 public interface IRepository<T> where T : class
 {
+    IQueryable<T> GetQueryable();
     Task AddAsync(T entity);
     Task AddRangeAsync(IEnumerable<T> entities);
     Task Remove(T entity);
