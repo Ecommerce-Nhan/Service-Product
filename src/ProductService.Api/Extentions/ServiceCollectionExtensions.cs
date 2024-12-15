@@ -6,6 +6,10 @@ using ProductService.Common.CQRS.Behaviors;
 using ProductService.Application.Behaviors;
 using ProductService.Application.Features.Commands.Products;
 using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using ProductService.Domain.Abtractions;
+using ProductService.Infrastructure.Repositories;
 
 namespace ProductService.Api.Extentions;
 
@@ -82,5 +86,33 @@ public static class ServiceCollectionExtensions
             };
         });
         return services;
+    }
+    public static IHostBuilder AddAutoFacConfiguration(this IHostBuilder host)
+    {
+        host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+        host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+        {
+            containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
+            containerBuilder.RegisterGeneric(typeof(ReadOnlyRepository<>)).As(typeof(IReadOnlyRepository<>)).InstancePerLifetimeScope();
+
+            var assemblies = new[] {
+                typeof(IRepository<>).Assembly,
+                typeof(Repository<>).Assembly
+            };
+
+            containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().InstancePerLifetimeScope();
+            containerBuilder.RegisterAssemblyTypes(assemblies)
+                            .Where(t => t.Name.EndsWith("Repository"))
+                            .AsImplementedInterfaces()
+                            .InstancePerLifetimeScope();
+
+            //containerBuilder.RegisterAssemblyTypes(typeof(IUriService).Assembly)
+            //                .Where(t => t.Name.EndsWith("Service"))
+            //                .AsImplementedInterfaces()
+            //                .InstancePerLifetimeScope();
+
+        });
+
+        return host;
     }
 }
