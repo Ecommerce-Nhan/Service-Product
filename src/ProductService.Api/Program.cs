@@ -3,10 +3,13 @@ using Serilog;
 
 try
 {
-    Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-    Log.Information("Starting server.");
-
     var builder = WebApplication.CreateBuilder(args);
+ 
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(builder.Configuration)
+       .CreateLogger();
+
+    Log.Information("Starting server.");
 
     var app = builder
         .ConfigureServices()

@@ -1,35 +1,69 @@
 ﻿name: product-service
 services:
+  # Elastic Search
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+    container_name: Elastic_Search
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=datasearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - cluster.initial_master_nodes=elasticsearch
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+  # Kibana
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.0.1
+    container_name: Kibana
+    ports:
+      - "5601:5601"
   # Your .NET application service
   api:
-    container_name: product-api
     image: product-service-api:latest
+    container_name: Api
     build:
         context: .
         dockerfile: src/ProductService.Api/Dockerfile
     ports:
-      - "80:80"
+      - "8090:80"
     environment:
-      - ASPNETCORE_ENVIRONMENT=docker
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=productDB;Username=postgres;Password=admin
     depends_on:
       postgres:
         condition: service_healthy
+      elasticsearch:
+        condition: service_started
   # PostgreSQL database service
   postgres:
-    container_name: product-database
     image: postgres
+    container_name: Database
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
+      POSTGRES_DB: productDB
     ports:
       - "5432:5432"
     volumes:
       - postgres-data:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
 volumes:
   postgres-data:
+  esdata:
+    driver: local
+    driver_opts:
+      type: none
+      device: \xdata\docker\elasticsearch\data
+      o: bind

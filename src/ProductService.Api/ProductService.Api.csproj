@@ -7,22 +7,17 @@
     <UserSecretsId>17e33a47-86bf-47b5-9d18-e2667e1da1ee</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-	<ContainerImageName>products-crud-api</ContainerImageName>
+	<ContainerImageName>products-service</ContainerImageName>
 	<ContainerImageTags>latest</ContainerImageTags>
 	<!--<PublishProfile>DefaultContainer</PublishProfile>
 	<RuntimeIdentifier>linux-x64</RuntimeIdentifier>-->
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Logs\**" />
-    <Content Remove="Logs\**" />
-    <EmbeddedResource Remove="Logs\**" />
-    <None Remove="Logs\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Build.Containers" Version="9.0.101" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
   </ItemGroup>
 

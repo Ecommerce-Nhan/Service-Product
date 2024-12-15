@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Exceptions;
+using ProductService.Application.Implements;
+using ProductService.Application.Interfaces;
 using ProductService.Application.Mappers;
 using ProductService.Common.CQRS;
 using ProductService.Domain.Abtractions;
@@ -16,16 +18,20 @@ internal static class HostingExtentions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
-        builder.Host.UseSerilog((context, loggerConfiguration) =>
-        {
-            loggerConfiguration.WriteTo.Console();
-            loggerConfiguration.ReadFrom.Configuration(context.Configuration);
-        });
+        builder.Host.UseSerilog();
 
         builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         builder.Services.AddScoped(typeof(IReadOnlyRepository<>), typeof(ReadOnlyRepository<>));
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
         builder.Services.AddScoped<IProductReadOnlyRepository, ProductReadOnlyRepository>();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSingleton<IUriService>(o =>
+        {
+            var accessor = o.GetRequiredService<IHttpContextAccessor>();
+            var request = accessor.HttpContext?.Request;
+            var uri = string.Concat(request?.Scheme, "://", request?.Host.ToUriComponent());
+            return new UriService(uri);
+        });
 
         builder.Services.AddControllers();
         builder.Services.AddSwaggerConfiguration();
@@ -64,6 +70,7 @@ internal static class HostingExtentions
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
+        app.UseSerilogRequestLogging();
 
         return app;
     }
