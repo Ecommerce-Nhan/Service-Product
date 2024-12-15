@@ -35,6 +35,11 @@ namespace ProductService.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_Code",
+                table: "Products",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_Id",
                 table: "Products",
                 column: "Id");

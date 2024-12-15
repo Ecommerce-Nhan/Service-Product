@@ -66,6 +66,8 @@ namespace ProductService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code");
+
                     b.HasIndex("Id");
 
                     b.ToTable("Products", (string)null);

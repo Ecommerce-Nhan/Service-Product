@@ -13,7 +13,7 @@ using ProductService.Infrastructure;
 namespace ProductService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241211125531_InitDB")]
+    [Migration("20241215135953_InitDB")]
     partial class InitDB
     {
         /// <inheritdoc />
@@ -68,6 +68,8 @@ namespace ProductService.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code");
 
                     b.HasIndex("Id");
 
