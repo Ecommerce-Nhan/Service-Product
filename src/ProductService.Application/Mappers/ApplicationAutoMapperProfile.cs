@@ -19,6 +19,9 @@ public class PagedResponseConverter<TSource, TDestination> : ITypeConverter<Page
     public PagedResponse<TDestination> Convert(PagedResponse<TSource> source, PagedResponse<TDestination> destination, ResolutionContext context)
     {
         var mappedData = context.Mapper.Map<TDestination>(source.Data);
-        return new PagedResponse<TDestination>(mappedData, source.PageNumber, source.PageSize);
+        var result = new PagedResponse<TDestination>(mappedData, source.PageNumber, source.PageSize);
+        result.TotalRecords = source.TotalRecords;
+        result.TotalPages = source.TotalPages;
+        return result;
     }
 }

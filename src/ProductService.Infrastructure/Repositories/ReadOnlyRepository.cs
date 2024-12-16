@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductService.Common.Filters;
 using ProductService.Common.Wrappers;
+using ProductService.Domain;
 using ProductService.Domain.Abtractions;
 
 namespace ProductService.Infrastructure.Repositories;
@@ -10,7 +11,9 @@ public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
     protected readonly IQueryable<T> _queryable;
     public ReadOnlyRepository(AppDbContext context)
     {
-        _queryable = context.Set<T>().AsNoTracking();
+        _queryable = context.Set<T>()
+                            .AsNoTracking()
+                            .Where(x => EF.Property<DateTime?>(x, nameof(BaseEntity.DeletedAt)) == null);
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {

@@ -7,9 +7,4 @@ public record ProductDto(Guid Id,
                          string? Note,
                          float CostPrice,
                          float UnitPrice,
-                         List<string>? Images,
-                         Guid CreateBy,
-                         DateTime CreateAt,
-                         Guid? UpdateBy,
-                         DateTime? UpdateAt,
-                         DateTime? DeletedAt);
+                         List<string>? Images);
