@@ -10,6 +10,7 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using ProductService.Domain.Abtractions;
 using ProductService.Infrastructure.Repositories;
+using ProductService.Domain.Products;
 
 namespace ProductService.Api.Extentions;
 
@@ -111,6 +112,7 @@ public static class ServiceCollectionExtensions
             //                .AsImplementedInterfaces()
             //                .InstancePerLifetimeScope();
 
+            containerBuilder.RegisterType<ProductManager>().InstancePerLifetimeScope();
         });
 
         return host;

@@ -20,7 +20,7 @@ public class ProductController : ControllerBase
     [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll([FromQuery] GetProductListQuery model)
     {
-        var query = new GetProductListQuery(model.Request, model.Filter);
+        var query = new GetProductListQuery(model.Sort, model.Filter);
         var result = await _sender.Send(query);
         return Ok(result);
     }

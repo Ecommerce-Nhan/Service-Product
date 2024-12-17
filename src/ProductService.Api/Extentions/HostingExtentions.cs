@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using ProductService.Api.Middlewares;
 using ProductService.Application.Exceptions;
 using ProductService.Application.Mappers;
 using ProductService.Common.CQRS;
@@ -52,6 +53,7 @@ internal static class HostingExtentions
         app.UseAuthorization();
         app.MapControllers();
         app.UseSerilogRequestLogging();
+        app.UseMiddleware<RequestDurationMiddleware>();
 
         return app;
     }

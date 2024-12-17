@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductService.Common.Filters;
-using ProductService.Common.Wrappers;
 using ProductService.Domain;
 using ProductService.Domain.Abtractions;
 
@@ -12,8 +10,8 @@ public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
     public ReadOnlyRepository(AppDbContext context)
     {
         Queryable = context.Set<T>()
-                            .AsNoTracking()
-                            .Where(x => EF.Property<DateTime?>(x, nameof(BaseEntity.DeletedAt)) == null);
+                           .AsNoTracking()
+                           .Where(x => EF.Property<DateTime?>(x, nameof(BaseEntity.DeletedAt)) == null);
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {
@@ -22,19 +20,5 @@ public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
     public async Task<IEnumerable<T>> GetAllAsync()
     {
         return await Queryable.ToListAsync();
-    }
-    public async Task<PagedResponse<List<T>>> GetPageAsync(PaginationFilter pageFilter)
-    {
-        var validFilter = new PaginationFilter(pageFilter.PageNumber, pageFilter.PageSize);
-        var pagedData = await Queryable.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
-                                        .Take(validFilter.PageSize)
-                                        .ToListAsync();
-        var totalRecords = await Queryable.CountAsync();
-        var response = new PagedResponse<List<T>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
-        var totalPages = ((double)totalRecords / validFilter.PageSize);
-        int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
-        response.TotalPages = roundedTotalPages;
-        response.TotalRecords = totalRecords;
-        return response;
     }
 }

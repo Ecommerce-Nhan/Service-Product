@@ -8,15 +8,15 @@ namespace ProductService.Common.CQRS.UseCases.Products.GetListProducts;
 
 public class GetProductListQuery : IRequest<PagedResponse<List<ProductDto>>>
 {
-    public GetProductRequest Request { get; set; } = new();
+    public GetProductRequest Sort { get; set; } = new();
     public PaginationFilter Filter { get; set; } = new();
     public GetProductListQuery() 
     {
     }
-    public GetProductListQuery(GetProductRequest request,
+    public GetProductListQuery(GetProductRequest sort,
                                PaginationFilter filter)
     {
-        Request = request;
+        Sort = sort;
         Filter = filter;
     }
 }

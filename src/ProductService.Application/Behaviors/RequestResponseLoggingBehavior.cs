@@ -16,8 +16,8 @@ public class RequestResponseLoggingBehavior<TRequest, TResponse>
         Log.Information("Handling request {CorrelationID}: {Request}", correlationId, requestJson);
 
         var response = await next();
-        var responseJson = JsonSerializer.Serialize(response);
-        Log.Information("Response for {Correlation}: {Response}", correlationId, responseJson);
+        //var responseJson = JsonSerializer.Serialize(response);
+        //Log.Information("Response for {Correlation}: {Response}", correlationId, responseJson);
 
         return response;
     }
