@@ -18,12 +18,16 @@ services:
       - "9200:9200"
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    networks:
+      - shared_network
   # Kibana
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.1
     container_name: Kibana
     ports:
       - "5601:5601"
+    networks:
+      - shared_network
   # Your .NET application service
   api:
     image: product-service-api:latest
@@ -36,29 +40,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=productDB;Username=postgres;Password=admin
-    depends_on:
-      postgres:
-        condition: service_healthy
-      elasticsearch:
-        condition: service_started
-  # PostgreSQL database service
-  postgres:
-    image: postgres
-    container_name: Database
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: productDB
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/data/db
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    networks:
+      - shared_network
 volumes:
   postgres-data:
   esdata:
@@ -67,3 +50,7 @@ volumes:
       type: none
       device: \xdata\docker\elasticsearch\data
       o: bind
+
+networks:
+  shared_network:
+    external: true
