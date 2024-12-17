@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace ProductService.Application.Behaviors;
 
-public class RequestResponseLoggingBehavior<TRequest, TResponse>() 
+public class RequestResponseLoggingBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse> where TRequest : class
 {
     public async Task<TResponse> Handle(TRequest request, 

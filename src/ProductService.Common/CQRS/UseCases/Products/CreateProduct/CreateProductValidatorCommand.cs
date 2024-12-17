@@ -6,9 +6,9 @@ public class CreateProductValidatorCommand : AbstractValidator<CreateProductComm
 {
     public CreateProductValidatorCommand()
     {
-        RuleFor(x => x.model.Name).NotEmpty().WithMessage("Name is required.")
+        RuleFor(x => x.Model.Name).NotEmpty().WithMessage("Name is required.")
                                   .Length(5, 50).WithMessage("Name must be between 5 and 50 characters.");
 
-        RuleFor(x => x.model.CostPrice).InclusiveBetween(10, 500).WithMessage("Cost price must be between 10 and 500.");
+        RuleFor(x => x.Model.CostPrice).InclusiveBetween(10, 500).WithMessage("Cost price must be between 10 and 500.");
     }
 }

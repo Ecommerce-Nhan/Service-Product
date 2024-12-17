@@ -6,15 +6,9 @@ using Serilog;
 
 namespace ProductService.Common.CQRS.Behaviors;
 
-public class CachingBehavior<TRequest, TResponse> 
-    : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheable
+public class CachingBehavior<TRequest, TResponse>(IDistributedCache cache) : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : ICacheable
 {
-    private readonly IDistributedCache cache;
-    public CachingBehavior(IDistributedCache cache)
-    {
-        this.cache = cache;
-    }
-
     public async Task<TResponse> Handle(TRequest request, 
                                         RequestHandlerDelegate<TResponse> next, 
                                         CancellationToken cancellationToken)

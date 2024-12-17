@@ -4,5 +4,5 @@ namespace ProductService.Common.CQRS.UseCases.Products.GetListProducts;
 
 public class GetProductListResponse : BaseResponse
 {
-    public List<ProductDto> ProductList;
+    public List<ProductDto> ProductList = new();
 }

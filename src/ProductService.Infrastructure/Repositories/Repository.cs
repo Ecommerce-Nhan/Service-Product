@@ -5,45 +5,45 @@ namespace ProductService.Infrastructure.Repositories;
 
 public class Repository<T> : IRepository<T> where T : class
 {
-    protected readonly AppDbContext _context;
-    protected readonly DbSet<T> _dbSet;
+    protected readonly AppDbContext Context;
+    protected readonly DbSet<T> DbSet;
     public Repository(AppDbContext context)
     {
-        _context = context;
-        _dbSet = _context.Set<T>();
+        Context = context;
+        DbSet = Context.Set<T>();
     }
     public async Task AddAsync(T entity)
     {
-        await _dbSet.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        await DbSet.AddAsync(entity);
+        await Context.SaveChangesAsync();
     }
     public async Task AddRangeAsync(IEnumerable<T> entities)
     {
-        await _dbSet.AddRangeAsync(entities);
-        await _context.SaveChangesAsync();
+        await DbSet.AddRangeAsync(entities);
+        await Context.SaveChangesAsync();
     }
     public IQueryable<T> GetQueryable()
     {
-        return _dbSet.AsQueryable();
+        return DbSet.AsQueryable();
     }
     public async Task Remove(T entity)
     {
-        _dbSet.Remove(entity);
-        await _context.SaveChangesAsync();
+        DbSet.Remove(entity);
+        await Context.SaveChangesAsync();
     }
     public async Task RemoveRange(IEnumerable<T> entities)
     {
-        _dbSet.RemoveRange(entities);
-        await _context.SaveChangesAsync();
+        DbSet.RemoveRange(entities);
+        await Context.SaveChangesAsync();
     }
     public async Task Update(T entity)
     {
-        _dbSet.Update(entity);
-        await _context.SaveChangesAsync();
+        DbSet.Update(entity);
+        await Context.SaveChangesAsync();
     }
     public async Task UpdateRange(IEnumerable<T> entities)
     {
-        _dbSet.UpdateRange(entities);
-        await _context.SaveChangesAsync();
+        DbSet.UpdateRange(entities);
+        await Context.SaveChangesAsync();
     }
 }

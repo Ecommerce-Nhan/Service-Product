@@ -8,30 +8,30 @@ namespace ProductService.Infrastructure.Repositories;
 
 public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
 {
-    protected readonly IQueryable<T> _queryable;
+    protected readonly IQueryable<T> Queryable;
     public ReadOnlyRepository(AppDbContext context)
     {
-        _queryable = context.Set<T>()
+        Queryable = context.Set<T>()
                             .AsNoTracking()
                             .Where(x => EF.Property<DateTime?>(x, nameof(BaseEntity.DeletedAt)) == null);
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _queryable.FirstOrDefaultAsync(x => EF.Property<Guid>(x, "Id") == id);
+        return await Queryable.FirstOrDefaultAsync(x => EF.Property<Guid>(x, "Id") == id);
     }
     public async Task<IEnumerable<T>> GetAllAsync()
     {
-        return await _queryable.ToListAsync();
+        return await Queryable.ToListAsync();
     }
     public async Task<PagedResponse<List<T>>> GetPageAsync(PaginationFilter pageFilter)
     {
         var validFilter = new PaginationFilter(pageFilter.PageNumber, pageFilter.PageSize);
-        var pagedData = await _queryable.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+        var pagedData = await Queryable.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                                         .Take(validFilter.PageSize)
                                         .ToListAsync();
-        var totalRecords = await _queryable.CountAsync();
+        var totalRecords = await Queryable.CountAsync();
         var response = new PagedResponse<List<T>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
-        var totalPages = ((double)totalRecords / (double)validFilter.PageSize);
+        var totalPages = ((double)totalRecords / validFilter.PageSize);
         int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
         response.TotalPages = roundedTotalPages;
         response.TotalRecords = totalRecords;
