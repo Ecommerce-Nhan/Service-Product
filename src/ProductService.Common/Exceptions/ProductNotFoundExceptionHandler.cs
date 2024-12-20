@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
-namespace ProductService.Application.Exceptions;
+namespace ProductService.Common.Exceptions;
 
 public class ProductNotFoundExceptionHandler : IExceptionHandler
 {

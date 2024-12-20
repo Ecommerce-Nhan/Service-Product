@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ProductService.Application.Exceptions;
+namespace ProductService.Common.Exceptions;
 
 public class BaseException : Exception
 {

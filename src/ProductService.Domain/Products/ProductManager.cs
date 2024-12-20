@@ -1,4 +1,6 @@
-﻿namespace ProductService.Domain.Products;
+﻿using ProductService.Common.Exceptions;
+
+namespace ProductService.Domain.Products;
 
 public class ProductManager
 {
@@ -17,12 +19,12 @@ public class ProductManager
         var existingEntity = await _repository.FindByCodeAsync(code);
         if (existingEntity != null)
         {
-            throw new Exception("Existing Entity");
+            throw new ProductNotFoundException(code);
         }
         existingEntity = await _repository.FindByNameAsync(name);
         if (existingEntity != null)
         {
-            throw new Exception("Existing Entity");
+            throw new ProductNotFoundException(name, true);
         }
 
         return new Product

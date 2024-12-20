@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-namespace ProductService.Application.Exceptions;
+namespace ProductService.Common.Exceptions;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
