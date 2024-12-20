@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
+using ProductService.Common.CQRS.UseCases.Products.DeleteProduct;
 using ProductService.Common.CQRS.UseCases.Products.GetListProducts;
 using ProductService.Common.CQRS.UseCases.Products.GetProductById;
 using ProductService.Common.Dtos.Products;
@@ -39,5 +40,13 @@ public class ProductController : ControllerBase
         var command = new CreateProductCommand(model);
         var result = await _sender.Send(command);
         return Ok(result);
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromBody] Guid id)
+    {
+        var command = new DeleteProductCommand(id);
+        await _sender.Send(command);
+        return Ok();
     }
 }
