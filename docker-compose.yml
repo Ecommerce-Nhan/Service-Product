@@ -15,8 +15,8 @@ services:
         hard: -1
     ports:
       - "9200:9200"
-    volumes:
-      - D:\Docker\Data\Elasticsearch:/usr/share/elasticsearch/data
+    # volumes:
+    #   - D:\Docker\Data\Elasticsearch:/usr/share/elasticsearch/data
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.1
     container_name: Kibana
@@ -43,8 +43,8 @@ services:
       POSTGRES_DB: productDB
     ports:
       - "5435:5432"
-    volumes:
-      - D:\Docker\Data\Postgres:/var/lib/postgresql/data
+    # volumes:
+    #   - D:\Docker\Data\Postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
