@@ -25,6 +25,7 @@ internal static class HostingExtentions
         builder.Services.AddAutoMapper(typeof(ApplicationAutoMapperProfile).Assembly);
         builder.Services.AddHttpClient();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddExceptionHandler<ProductNotFoundExceptionHandler>();
         builder.Services.AddProblemDetails();
 
         return builder.Build();
