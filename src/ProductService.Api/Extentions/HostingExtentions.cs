@@ -27,6 +27,15 @@ internal static class HostingExtentions
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddExceptionHandler<ProductNotFoundExceptionHandler>();
         builder.Services.AddProblemDetails();
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", builder =>
+                                          {
+                                              builder.AllowAnyOrigin()
+                                                     .AllowAnyMethod()
+                                                     .AllowAnyHeader();
+                                          });
+        });
 
         return builder.Build();
     }
@@ -49,6 +58,7 @@ internal static class HostingExtentions
             });
         }
 
+        app.UseCors("AllowAll");
         app.UseExceptionHandler();
         app.UseHttpsRedirection();
         app.UseAuthorization();
