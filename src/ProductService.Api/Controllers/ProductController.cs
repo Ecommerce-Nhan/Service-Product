@@ -4,6 +4,7 @@ using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
 using ProductService.Common.CQRS.UseCases.Products.DeleteProduct;
 using ProductService.Common.CQRS.UseCases.Products.GetListProducts;
 using ProductService.Common.CQRS.UseCases.Products.GetProductById;
+using ProductService.Common.CQRS.UseCases.Products.UpdateProduct;
 using ProductService.Common.Dtos.Products;
 
 namespace ProductService.Api.Controllers;
@@ -47,6 +48,14 @@ public class ProductController : ControllerBase
     {
         var command = new DeleteProductCommand(id);
         await _sender.Send(command);
-        return Ok();
+        return NoContent();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Put([FromBody] UpdateProductDto model)
+    {
+        var command = new UpdateProductCommand(model);
+        await _sender.Send(command);
+        return NoContent();
     }
 }

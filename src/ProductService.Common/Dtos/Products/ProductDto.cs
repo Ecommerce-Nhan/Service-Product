@@ -1,5 +1,4 @@
-﻿
-namespace ProductService.Common.Dtos.Products;
+﻿namespace ProductService.Common.Dtos.Products;
 
 public record ProductDto(Guid Id,
                          string Name,

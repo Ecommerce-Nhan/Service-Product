@@ -37,4 +37,36 @@ public class ProductManager
             Images = images
         };
     }
+
+    public async Task ChangeCodeAsync(Product product, string newCode)
+    {
+        if (string.IsNullOrEmpty(newCode) || string.IsNullOrWhiteSpace(newCode))
+        {
+            throw new Exception("Code is required");
+        }
+
+        var existingEntity = await _repository.FindByCodeAsync(newCode);
+        if (existingEntity != null && existingEntity.Id != product.Id)
+        {
+            throw new Exception($"Already exitsing entity with code {newCode}");
+        }
+
+        product.ChangeCode(newCode);
+    }
+
+    public async Task ChangeNameAsync(Product product, string newName)
+    {
+        if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
+        {
+            throw new Exception("Name is required");
+        }
+
+        var existingEntity = await _repository.FindByNameAsync(newName);
+        if (existingEntity != null && existingEntity.Id != product.Id)
+        {
+            throw new Exception($"Already exitsing entity with name {newName}");
+        }
+
+        product.ChangeName(newName);
+    }
 }
