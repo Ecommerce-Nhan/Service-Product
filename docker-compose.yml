@@ -30,9 +30,7 @@ services:
         dockerfile: src/ProductService.Api/Dockerfile
     ports:
       - "8090:80"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      - "8091:443"
     depends_on:
       postgres:
         condition: service_healthy

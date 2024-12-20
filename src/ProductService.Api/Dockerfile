@@ -3,7 +3,12 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+COPY ["../../certificate.pfx", ""]
+
 ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=https://+:443;http://+:80
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password=Nhan123?
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certificate.pfx
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
