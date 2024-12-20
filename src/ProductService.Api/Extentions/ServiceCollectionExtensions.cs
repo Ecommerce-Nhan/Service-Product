@@ -11,6 +11,7 @@ using Autofac;
 using ProductService.Domain.Abtractions;
 using ProductService.Infrastructure.Repositories;
 using ProductService.Domain.Products;
+using Asp.Versioning;
 
 namespace ProductService.Api.Extentions;
 
@@ -18,34 +19,20 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
     {
-        services.AddSwaggerGen(c =>
+        services.AddApiVersioning(cfg =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Product API", Version = "v1.0.0" });
-            c.AddSecurityDefinition("Bearer",
-                new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header
-                        },
-                        new List<string>()
-                    }
-                });
+            cfg.DefaultApiVersion = new ApiVersion(1, 0);
+            cfg.AssumeDefaultVersionWhenUnspecified = true;
+            cfg.ReportApiVersions = true;
+        });
+
+        services.AddSwaggerGen(cfg =>
+        {
+            cfg.SwaggerDoc("v1", new OpenApiInfo { 
+                                     Title = "Product API v1.0", 
+                                     Version = "v1.0", 
+                                     Description = "Development by TTNhan" 
+                                 });
         });
 
         return services;
@@ -69,8 +56,8 @@ public static class ServiceCollectionExtensions
         {
             cfg.RegisterServicesFromAssemblies(assemblies);
             cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
-            cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
         });
 
         return services;
@@ -117,4 +104,5 @@ public static class ServiceCollectionExtensions
 
         return host;
     }
+
 }

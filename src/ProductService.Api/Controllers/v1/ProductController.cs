@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
 using ProductService.Common.CQRS.UseCases.Products.DeleteProduct;
@@ -7,10 +8,11 @@ using ProductService.Common.CQRS.UseCases.Products.GetProductById;
 using ProductService.Common.CQRS.UseCases.Products.UpdateProduct;
 using ProductService.Common.Dtos.Products;
 
-namespace ProductService.Api.Controllers;
+namespace ProductService.Api.Controllers.v1;
 
-
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiController]
 public class ProductController : ControllerBase
 {
     private readonly ISender _sender;
@@ -27,20 +29,20 @@ public class ProductController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("GetById")]
-    public async Task<IActionResult> GetById([FromQuery] Guid id)
-    {
-        var query = new GetProductQuery(id);
-        var result = await _sender.Send(query);
-        return Ok(result);
-    }
-
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateProductDto model)
     {
         var command = new CreateProductCommand(model);
         var result = await _sender.Send(command);
         return Ok(result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Put([FromBody] UpdateProductDto model)
+    {
+        var command = new UpdateProductCommand(model);
+        await _sender.Send(command);
+        return NoContent();
     }
 
     [HttpDelete]
@@ -51,11 +53,11 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Put([FromBody] UpdateProductDto model)
+    [HttpGet("GetById")]
+    public async Task<IActionResult> GetById([FromQuery] Guid id)
     {
-        var command = new UpdateProductCommand(model);
-        await _sender.Send(command);
-        return NoContent();
+        var query = new GetProductQuery(id);
+        var result = await _sender.Send(query);
+        return Ok(result);
     }
 }
