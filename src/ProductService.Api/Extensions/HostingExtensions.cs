@@ -1,15 +1,14 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using ProductService.Api.Middlewares;
 using ProductService.Application.Mappers;
 using ProductService.Common.CQRS;
 using ProductService.Common.Exceptions;
 using ProductService.Infrastructure;
 using Serilog;
 
-namespace ProductService.Api.Extentions;
+namespace ProductService.Api.Extensions;
 
-internal static class HostingExtentions
+internal static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
@@ -27,15 +26,6 @@ internal static class HostingExtentions
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddExceptionHandler<ProductNotFoundExceptionHandler>();
         builder.Services.AddProblemDetails();
-        builder.Services.AddCors(options =>
-        {
-            options.AddPolicy("AllowAll", builder =>
-                                          {
-                                              builder.AllowAnyOrigin()
-                                                     .AllowAnyMethod()
-                                                     .AllowAnyHeader();
-                                          });
-        });
 
         return builder.Build();
     }
@@ -58,13 +48,11 @@ internal static class HostingExtentions
             });
         }
 
-        app.UseCors("AllowAll");
         app.UseExceptionHandler();
-        app.UseHttpsRedirection();
-        app.UseAuthorization();
-        app.MapControllers();
         app.UseSerilogRequestLogging();
-        app.UseMiddleware<RequestDurationMiddleware>();
+        app.UseHttpsRedirection();
+        //app.UseAuthorization();
+        app.MapControllers();
 
         return app;
     }

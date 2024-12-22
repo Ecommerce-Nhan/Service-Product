@@ -1,4 +1,4 @@
-using ProductService.Api.Extentions;
+using ProductService.Api.Extensions;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Formatting.Elasticsearch;

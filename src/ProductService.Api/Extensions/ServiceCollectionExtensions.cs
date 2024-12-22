@@ -13,7 +13,7 @@ using ProductService.Infrastructure.Repositories;
 using ProductService.Domain.Products;
 using Asp.Versioning;
 
-namespace ProductService.Api.Extentions;
+namespace ProductService.Api.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -25,7 +25,6 @@ public static class ServiceCollectionExtensions
             cfg.AssumeDefaultVersionWhenUnspecified = true;
             cfg.ReportApiVersions = true;
         });
-
         services.AddSwaggerGen(cfg =>
         {
             cfg.SwaggerDoc("v1", new OpenApiInfo { 
