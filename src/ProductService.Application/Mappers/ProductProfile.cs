@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ProductService.Common.Dtos.Products;
+using SharedLibrary.Dtos.Products;
 using ProductService.Domain.Products;
 
 namespace ProductService.Application.Mappers;

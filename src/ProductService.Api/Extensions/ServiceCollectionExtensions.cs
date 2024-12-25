@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using ProductService.Infrastructure;
 using Microsoft.OpenApi.Models;
-using ProductService.Common.CQRS.Behaviors;
+using SharedLibrary.CQRS.Behaviors;
 using ProductService.Application.Behaviors;
 using ProductService.Application.Features.Commands.Products;
-using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
+using SharedLibrary.CQRS.UseCases.Products.CreateProduct;
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using ProductService.Domain.Abtractions;

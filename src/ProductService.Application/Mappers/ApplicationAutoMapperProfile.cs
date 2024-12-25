@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ProductService.Common.Wrappers;
+using SharedLibrary.Wrappers;
 
 namespace ProductService.Application.Mappers;
 

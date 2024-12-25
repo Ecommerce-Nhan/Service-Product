@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using ProductService.Common.CQRS.UseCases.Products.GetListProducts;
-using ProductService.Common.Dtos.Products;
-using ProductService.Common.Wrappers;
+using SharedLibrary.CQRS.UseCases.Products.GetListProducts;
+using SharedLibrary.Dtos.Products;
+using SharedLibrary.Wrappers;
 using ProductService.Domain.Products;
 
 namespace ProductService.Application.Features.Queries.Products;

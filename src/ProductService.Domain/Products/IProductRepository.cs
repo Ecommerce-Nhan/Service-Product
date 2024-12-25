@@ -1,5 +1,5 @@
-﻿using ProductService.Common.Filters;
-using ProductService.Common.Wrappers;
+﻿using SharedLibrary.Filters;
+using SharedLibrary.Wrappers;
 using ProductService.Domain.Abtractions;
 
 namespace ProductService.Domain.Products;

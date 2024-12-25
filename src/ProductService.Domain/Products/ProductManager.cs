@@ -1,4 +1,5 @@
-﻿using ProductService.Common.Exceptions;
+﻿using SharedLibrary.Exceptions;
+using SharedLibrary.Exceptions.Products;
 
 namespace ProductService.Domain.Products;
 

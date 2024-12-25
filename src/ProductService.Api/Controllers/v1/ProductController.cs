@@ -1,12 +1,12 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
-using ProductService.Common.CQRS.UseCases.Products.DeleteProduct;
-using ProductService.Common.CQRS.UseCases.Products.GetListProducts;
-using ProductService.Common.CQRS.UseCases.Products.GetProductById;
-using ProductService.Common.CQRS.UseCases.Products.UpdateProduct;
-using ProductService.Common.Dtos.Products;
+using SharedLibrary.CQRS.UseCases.Products.CreateProduct;
+using SharedLibrary.CQRS.UseCases.Products.DeleteProduct;
+using SharedLibrary.CQRS.UseCases.Products.GetListProducts;
+using SharedLibrary.CQRS.UseCases.Products.GetProductById;
+using SharedLibrary.CQRS.UseCases.Products.UpdateProduct;
+using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Api.Controllers.v1;
 

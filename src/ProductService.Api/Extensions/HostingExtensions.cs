@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Mappers;
-using ProductService.Common.CQRS;
-using ProductService.Common.Exceptions;
+using SharedLibrary.CQRS;
+using SharedLibrary.Exceptions;
 using ProductService.Infrastructure;
 using Serilog;
+using SharedLibrary.Exceptions.Products;
 
 namespace ProductService.Api.Extensions;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductService.Common.Filters;
-using ProductService.Common.Wrappers;
+using SharedLibrary.Filters;
+using SharedLibrary.Wrappers;
 using ProductService.Domain.Products;
 
 namespace ProductService.Infrastructure.Repositories.Products;
