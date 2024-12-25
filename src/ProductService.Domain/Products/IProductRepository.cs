@@ -1,6 +1,6 @@
 ﻿using SharedLibrary.Filters;
+using SharedLibrary.Repositories.Abtractions;
 using SharedLibrary.Wrappers;
-using ProductService.Domain.Abtractions;
 
 namespace ProductService.Domain.Products;
 

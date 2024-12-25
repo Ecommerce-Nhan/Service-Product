@@ -2,10 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Mappers;
 using SharedLibrary.CQRS;
-using SharedLibrary.Exceptions;
 using ProductService.Infrastructure;
 using Serilog;
-using SharedLibrary.Exceptions.Products;
+using SharedLibrary.Extentions;
 
 namespace ProductService.Api.Extensions;
 
@@ -24,9 +23,6 @@ internal static class HostingExtensions
         builder.Services.AddRedisCacheConfiguration();
         builder.Services.AddAutoMapper(typeof(ApplicationAutoMapperProfile).Assembly);
         builder.Services.AddHttpClient();
-        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-        builder.Services.AddExceptionHandler<ProductNotFoundExceptionHandler>();
-        builder.Services.AddProblemDetails();
 
         return builder.Build();
     }
@@ -52,7 +48,6 @@ internal static class HostingExtensions
         app.UseExceptionHandler();
         app.UseSerilogRequestLogging();
         app.UseHttpsRedirection();
-        //app.UseAuthorization();
         app.MapControllers();
 
         return app;
