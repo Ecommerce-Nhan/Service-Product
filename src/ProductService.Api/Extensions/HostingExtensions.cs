@@ -16,13 +16,14 @@ internal static class HostingExtensions
         builder.Host.AddAutoFacConfiguration();
 
         builder.Services.AddControllers();
+        builder.Services.AddHttpClient();
         builder.Services.AddSwaggerConfiguration();
         builder.Services.AddDatabaseConfiguration(builder.Configuration);
         builder.Services.AddMediatRConfiguration();
         builder.Services.AddValidatorsFromAssembly(typeof(BaseRequest).Assembly);
+        builder.Services.AddAutoMapper(typeof(ProductAutoMapperProfile).Assembly);
         builder.Services.AddRedisCacheConfiguration();
-        builder.Services.AddAutoMapper(typeof(ApplicationAutoMapperProfile).Assembly);
-        builder.Services.AddHttpClient();
+        builder.Services.AddHandleException();
 
         return builder.Build();
     }
