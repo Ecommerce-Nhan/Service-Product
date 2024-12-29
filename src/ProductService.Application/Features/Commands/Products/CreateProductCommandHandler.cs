@@ -22,7 +22,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
                 input.Name,
                 input.Code,
                 input.Note,
-                input.UnitPrice,
                 input.CostPrice,
                 input.Images
             );

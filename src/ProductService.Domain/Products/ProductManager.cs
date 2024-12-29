@@ -15,7 +15,6 @@ public class ProductManager
                          string code,
                          string? note,
                          float costPrice,
-                         float unitPrice,
                          List<string>? images)
     {
         var existingEntity = await _repository.FindByCodeAsync(code);
@@ -35,7 +34,6 @@ public class ProductManager
             Code = code,
             Note = note,
             CostPrice = costPrice,
-            UnitPrice = unitPrice,
             Images = images
         };
     }

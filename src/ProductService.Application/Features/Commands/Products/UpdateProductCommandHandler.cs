@@ -34,7 +34,6 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
             await _manager.ChangeNameAsync(product, input.Name);
         }
         product.Note = input.Note;
-        product.UnitPrice = input.UnitPrice;
         product.CostPrice = input.CostPrice;
         product.Images = input.Images;
         
