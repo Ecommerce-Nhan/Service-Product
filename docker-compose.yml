@@ -27,7 +27,7 @@ services:
     container_name: Api
     build:
         context: .
-        dockerfile: src/ProductService.Api/Dockerfile
+        dockerfile: Dockerfile
     ports:
       - "8090:80"
       - "8091:443"

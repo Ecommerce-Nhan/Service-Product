@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-COPY ["../../certificate.pfx", ""]
+COPY ["certificate.pfx", ""]
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_URLS=https://+:443;http://+:80
