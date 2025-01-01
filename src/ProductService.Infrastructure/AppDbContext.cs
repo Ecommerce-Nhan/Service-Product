@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductService.Domain.Products;
+using ProductService.Domain.Variants;
 
 namespace ProductService.Infrastructure;
 
@@ -18,4 +19,5 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Variant> Variants { get; set; }
 }

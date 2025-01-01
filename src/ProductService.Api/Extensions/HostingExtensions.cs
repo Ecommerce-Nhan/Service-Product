@@ -46,7 +46,7 @@ internal static class HostingExtensions
             });
         }
 
-        app.UseExceptionHandler();
+        app.UseExceptionHandler("/error");
         app.UseSerilogRequestLogging();
         app.UseHttpsRedirection();
         app.MapControllers();
