@@ -19,8 +19,8 @@ jobs:
 
       - name: 📦 Build Docker Image
         run: |
-          docker build -t ${{ secrets.REPOSITORY }}:latest .
-          docker tag ${{ secrets.REPOSITORY }}:latest ${{ secrets.REPOSITORY }}:${{ github.sha }}
+          docker build -t product:latest .
+          docker tag product:latest ${{ secrets.REPOSITORY }}:latest
 
   publish:
     needs: build
@@ -48,6 +48,25 @@ jobs:
       - name: 📦 Publish Docker Image to Amazon ECR
         working-directory: ./src/
         run: |
-          docker push ${{ secrets.REPOSITORY }}:${{ github.sha }}
-          docker push ${{ secrets.REPOSITORY }} --all-tags
+          docker push ${{ secrets.REPOSITORY }}:latest
 
+#   deploy:
+#     needs: publish
+#     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: 🛠️ Checkout Repository
+#         uses: actions/checkout@v4
+#       - name: 🔐 Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ap-southeast-1
+#       - name: 🚀 Deploy to Amazon ECS
+#         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+#         with:
+#           task-definition: ./deployments/ecs-task-definition.json
+#           service: bookmanager
+#           cluster: dev-cluster
+#           wait-for-service-stability: true
