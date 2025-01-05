@@ -7,15 +7,15 @@ namespace ProductService.Infrastructure.Repositories;
 public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
 {
     protected readonly IQueryable<T> Queryable;
-    public ReadOnlyRepository(AppDbContext context)
+    public ReadOnlyRepository(AppReadOnlyDbContext context)
     {
         Queryable = context.Set<T>()
-                           .AsNoTracking()
-                           .Where(x => EF.Property<DateTime?>(x, nameof(BaseEntity.DeletedAt)) == null);
+                           .Where(x => EF.Property<DateTime?>(x, nameof(BaseEntity.DeletedAt)) 
+                                       == null);
     }
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await Queryable.FirstOrDefaultAsync(x => EF.Property<Guid>(x, "Id") == id);
+        return await Queryable.FirstOrDefaultAsync(x => EF.Property<Guid>(x, nameof(BaseEntity.Id)) == id);
     }
     public async Task<IEnumerable<T>> GetAllAsync()
     {

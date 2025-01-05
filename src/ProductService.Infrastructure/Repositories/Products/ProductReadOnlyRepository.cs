@@ -7,7 +7,7 @@ namespace ProductService.Infrastructure.Repositories.Products;
 
 public class ProductReadOnlyRepository : ReadOnlyRepository<Product>, IProductReadOnlyRepository
 {
-    public ProductReadOnlyRepository(AppDbContext context) : base(context)
+    public ProductReadOnlyRepository(AppReadOnlyDbContext context) : base(context)
     {
 
     }

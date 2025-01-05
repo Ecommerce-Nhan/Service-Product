@@ -1,0 +1,20 @@
+﻿using Microsoft.EntityFrameworkCore;
+using ProductService.Domain.Products;
+
+namespace ProductService.Infrastructure;
+
+public class AppReadOnlyDbContext : DbContext
+{
+    public AppReadOnlyDbContext()
+    {
+    }
+    public AppReadOnlyDbContext(DbContextOptions<AppReadOnlyDbContext> options) : base(options)
+    {
+    }
+    protected override void OnConfiguring(DbContextOptionsBuilder opts)
+    {
+        base.OnConfiguring(opts);
+        opts.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    }
+    public DbSet<Product> Products { get; set; }
+}
