@@ -10,7 +10,7 @@ namespace VariantService.Infrastructure.Repositories.Variants;
 
 public class VariantReadOnlyRepository : ReadOnlyRepository<Variant>, IVariantReadOnlyRepository
 {
-    public VariantReadOnlyRepository(AppDbContext context) : base(context)
+    public VariantReadOnlyRepository(AppReadOnlyDbContext context) : base(context)
     {
 
     }
