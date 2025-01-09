@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Mappers;
-using ProductService.Common.CQRS;
-using ProductService.Common.Exceptions;
+using SharedLibrary.CQRS;
 using ProductService.Infrastructure;
 using Serilog;
+using SharedLibrary.Extentions;
 
 namespace ProductService.Api.Extensions;
 
@@ -16,16 +16,14 @@ internal static class HostingExtensions
         builder.Host.AddAutoFacConfiguration();
 
         builder.Services.AddControllers();
+        builder.Services.AddHttpClient();
         builder.Services.AddSwaggerConfiguration();
         builder.Services.AddDatabaseConfiguration(builder.Configuration);
         builder.Services.AddMediatRConfiguration();
         builder.Services.AddValidatorsFromAssembly(typeof(BaseRequest).Assembly);
+        builder.Services.AddAutoMapper(typeof(ProductAutoMapperProfile).Assembly);
         builder.Services.AddRedisCacheConfiguration();
-        builder.Services.AddAutoMapper(typeof(ApplicationAutoMapperProfile).Assembly);
-        builder.Services.AddHttpClient();
-        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-        builder.Services.AddExceptionHandler<ProductNotFoundExceptionHandler>();
-        builder.Services.AddProblemDetails();
+        builder.Services.AddHandleException();
 
         return builder.Build();
     }
@@ -48,10 +46,9 @@ internal static class HostingExtensions
             });
         }
 
-        app.UseExceptionHandler();
+        app.UseExceptionHandler("/error");
         app.UseSerilogRequestLogging();
         app.UseHttpsRedirection();
-        //app.UseAuthorization();
         app.MapControllers();
 
         return app;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductService.Common.Filters;
-using ProductService.Common.Wrappers;
+using SharedLibrary.Filters;
+using SharedLibrary.Wrappers;
 using ProductService.Domain.Products;
 
 namespace ProductService.Infrastructure.Repositories.Products;
@@ -29,7 +29,7 @@ public class ProductReadOnlyRepository : ReadOnlyRepository<Product>, IProductRe
         var totalRecords = await Queryable.CountAsync();
         var response = new PagedResponse<List<Product>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
 
-        var totalPages = ((double)totalRecords / validFilter.PageSize);
+        var totalPages = ((double)totalRecords / validFilter.PageSize); 
         response.TotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
         response.TotalRecords = totalRecords;
         return response;

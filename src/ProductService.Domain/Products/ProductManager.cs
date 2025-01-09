@@ -1,4 +1,6 @@
-﻿using ProductService.Common.Exceptions;
+﻿using SharedLibrary.Exceptions;
+using SharedLibrary.Exceptions.Products;
+using System.Xml.Linq;
 
 namespace ProductService.Domain.Products;
 
@@ -13,18 +15,17 @@ public class ProductManager
                          string code,
                          string? note,
                          float costPrice,
-                         float unitPrice,
                          List<string>? images)
     {
         var existingEntity = await _repository.FindByCodeAsync(code);
         if (existingEntity != null)
         {
-            throw new ProductNotFoundException(code);
+            throw new ProductExistException(code);
         }
         existingEntity = await _repository.FindByNameAsync(name);
         if (existingEntity != null)
         {
-            throw new ProductNotFoundException(name, true);
+            throw new ProductExistException(name, true);
         }
 
         return new Product
@@ -33,7 +34,6 @@ public class ProductManager
             Code = code,
             Note = note,
             CostPrice = costPrice,
-            UnitPrice = unitPrice,
             Images = images
         };
     }
@@ -42,13 +42,13 @@ public class ProductManager
     {
         if (string.IsNullOrEmpty(newCode) || string.IsNullOrWhiteSpace(newCode))
         {
-            throw new Exception("Code is required");
+            throw new BaseException("Code is required");
         }
 
         var existingEntity = await _repository.FindByCodeAsync(newCode);
         if (existingEntity != null && existingEntity.Id != product.Id)
         {
-            throw new Exception($"Already exitsing entity with code {newCode}");
+            throw new ProductExistException(newCode, false);
         }
 
         product.ChangeCode(newCode);
@@ -58,13 +58,13 @@ public class ProductManager
     {
         if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
         {
-            throw new Exception("Name is required");
+            throw new BaseException("Name is required");
         }
 
         var existingEntity = await _repository.FindByNameAsync(newName);
         if (existingEntity != null && existingEntity.Id != product.Id)
         {
-            throw new Exception($"Already exitsing entity with name {newName}");
+            throw new ProductExistException(newName, true);
         }
 
         product.ChangeName(newName);

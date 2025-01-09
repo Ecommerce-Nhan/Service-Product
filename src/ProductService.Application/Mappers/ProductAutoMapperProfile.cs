@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using ProductService.Common.Wrappers;
+using SharedLibrary.Wrappers;
 
 namespace ProductService.Application.Mappers;
 
-public class ApplicationAutoMapperProfile : Profile
+public class ProductAutoMapperProfile : Profile
 {
-    public ApplicationAutoMapperProfile()
+    public ProductAutoMapperProfile()
     {
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations

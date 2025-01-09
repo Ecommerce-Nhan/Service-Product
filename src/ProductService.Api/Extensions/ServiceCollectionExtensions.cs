@@ -2,16 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using ProductService.Infrastructure;
 using Microsoft.OpenApi.Models;
-using ProductService.Common.CQRS.Behaviors;
-using ProductService.Application.Behaviors;
+using SharedLibrary.CQRS.Behaviors;
 using ProductService.Application.Features.Commands.Products;
-using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
+using SharedLibrary.CQRS.UseCases.Products.CreateProduct;
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
-using ProductService.Domain.Abtractions;
 using ProductService.Infrastructure.Repositories;
 using ProductService.Domain.Products;
 using Asp.Versioning;
+using SharedLibrary.Repositories.Abtractions;
 
 namespace ProductService.Api.Extensions;
 
@@ -62,19 +61,6 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-    public static IServiceCollection AddRedisCacheConfiguration(this IServiceCollection services)
-    {
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = "localhost";
-            options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
-            {
-                AbortOnConnectFail = true,
-                EndPoints = { options.Configuration }
-            };
-        });
-        return services;
-    }
     public static IHostBuilder AddAutoFacConfiguration(this IHostBuilder host)
     {
         host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -84,6 +70,7 @@ public static class ServiceCollectionExtensions
             containerBuilder.RegisterGeneric(typeof(ReadOnlyRepository<>)).As(typeof(IReadOnlyRepository<>)).InstancePerLifetimeScope();
 
             var assemblies = new[] {
+                typeof(IProductRepository).Assembly,
                 typeof(IRepository<>).Assembly,
                 typeof(Repository<>).Assembly
             };

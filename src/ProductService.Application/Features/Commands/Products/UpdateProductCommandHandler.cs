@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using ProductService.Common.CQRS.UseCases.Products.UpdateProduct;
-using ProductService.Common.Exceptions;
+using SharedLibrary.CQRS.UseCases.Products.UpdateProduct;
 using ProductService.Domain.Products;
+using SharedLibrary.Exceptions.Products;
 
 namespace ProductService.Application.Features.Commands.Products;
 
@@ -34,7 +34,6 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
             await _manager.ChangeNameAsync(product, input.Name);
         }
         product.Note = input.Note;
-        product.UnitPrice = input.UnitPrice;
         product.CostPrice = input.CostPrice;
         product.Images = input.Images;
         

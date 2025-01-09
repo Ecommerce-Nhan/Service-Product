@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
+using SharedLibrary.CQRS.UseCases.Products.CreateProduct;
 using ProductService.Domain.Products;
 
 namespace ProductService.Application.Features.Commands.Products;
@@ -22,7 +22,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
                 input.Name,
                 input.Code,
                 input.Note,
-                input.UnitPrice,
                 input.CostPrice,
                 input.Images
             );
