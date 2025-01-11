@@ -23,7 +23,11 @@ public class VariantReadOnlyRepository : ReadOnlyRepository<Variant>, IVariantRe
     {
         var pageFilter = query.Filter;
         var productId = query.ProductId;
-        var queryable = Queryable.Where(x => x.ProductId == productId);
+        var queryable = Queryable;
+        if (productId != Guid.Empty)
+        {
+            queryable = Queryable.Where(x => x.ProductId == productId);
+        }
         var validFilter = new PaginationFilter(pageFilter.PageNumber, pageFilter.PageSize);
         var pagedData = await queryable.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                                        .Take(validFilter.PageSize)
