@@ -5,6 +5,7 @@ using SharedLibrary.CQRS;
 using ProductService.Infrastructure;
 using Serilog;
 using SharedLibrary.Extentions;
+using Amazon.S3;
 
 namespace ProductService.Api.Extensions;
 
@@ -24,6 +25,8 @@ internal static class HostingExtensions
         builder.Services.AddAutoMapper(typeof(ProductAutoMapperProfile).Assembly);
         builder.Services.AddRedisCacheConfiguration();
         builder.Services.AddHandleException();
+        builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+        builder.Services.AddAWSService<IAmazonS3>();
 
         return builder.Build();
     }
