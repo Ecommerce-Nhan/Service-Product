@@ -3,6 +3,8 @@ using ProductService.Domain.Products;
 using Microsoft.AspNetCore.Http;
 using Hangfire;
 using ProductService.Application.Services.S3;
+using Amazon.S3.Model;
+using SharedLibrary.Helpers;
 
 namespace ProductService.Application.Features.Products.Commands.Create;
 
@@ -23,7 +25,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
                                    CancellationToken cancellationToken)
     {
         var input = command.Model;
-        var bucketName = "nhan-ecommerce-product-service";
+        var bucketName = Constants.ProductService.BucketName;
         var prefix = $"Products/Product-{input.Code}";
         var listUriImages = input.Images != null && input.Images.Any()
                             ? GenerateImagePlaceholders(input.Images, bucketName, prefix)
@@ -53,8 +55,8 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         return result.ToList();
     }
     public async Task UploadFileToS3(IEnumerable<IFormFile>? images,
-                                                   string bucketName,
-                                                   string prefix)
+                                                 string bucketName,
+                                                 string prefix)
     {
         if (images != null && images.Any())
         {
@@ -62,8 +64,15 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             {
                 if (!file.ContentType.StartsWith("image/"))
                     throw new Exception("Invalid File Format. We support only Images.");
-                await _s3Service.UploadToS3BucketAsync(file, bucketName, prefix);
-                BackgroundJob.Enqueue<IS3Service>(job => job.UploadToS3BucketAsync(file, bucketName, prefix));
+
+                var request = new PutObjectRequest()
+                {
+                    BucketName = bucketName,
+                    Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
+                    InputStream = file.OpenReadStream(),
+                };
+                request.Metadata.Add("Content-Type", file.ContentType);
+                await _s3Service.UploadToS3BucketAsync(request);
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
-using Microsoft.AspNetCore.Http;
 
 namespace ProductService.Application.Services.S3;
 
@@ -15,20 +14,17 @@ public class S3Service : IS3Service
     public async Task<(Stream, string)> GetFileByKeyAsync(string bucketName, string key)
     {
         var s3Object = await _s3Client.GetObjectAsync(bucketName, key);
-
-        return (s3Object.ResponseStream, s3Object.Headers.ContentType);
-    }
-    public async Task<string> UploadToS3BucketAsync(IFormFile file, string bucketName, string? prefix)
-    {
-        var request = new PutObjectRequest()
+        GetObjectRequest request = new GetObjectRequest()
         {
             BucketName = bucketName,
-            Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
-            InputStream = file.OpenReadStream()
+            Key = key
         };
-        request.Metadata.Add("Content-Type", file.ContentType);
+        return (s3Object.ResponseStream, s3Object.Headers.ContentType);
+    }
+    public async Task<string> UploadToS3BucketAsync(PutObjectRequest request)
+    {
         await _s3Client.PutObjectAsync(request);
-        string uriObject = $"{bucketName}/{request.Key}";
+        string uriObject = $"{request.BucketName}/{request.Key}";
 
         return uriObject;
     }
