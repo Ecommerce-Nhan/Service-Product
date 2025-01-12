@@ -17,8 +17,8 @@ public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
     {
         return await Queryable.FirstOrDefaultAsync(x => EF.Property<Guid>(x, nameof(BaseEntity.Id)) == id);
     }
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public IQueryable<T> GetQueryable()
     {
-        return await Queryable.ToListAsync();
+        return Queryable;
     }
 }

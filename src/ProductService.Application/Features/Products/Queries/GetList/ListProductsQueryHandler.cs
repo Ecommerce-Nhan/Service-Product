@@ -1,23 +1,22 @@
 ﻿using AutoMapper;
 using MediatR;
-using SharedLibrary.CQRS.UseCases.Products.GetListProducts;
+using ProductService.Domain.Products;
 using SharedLibrary.Dtos.Products;
 using SharedLibrary.Wrappers;
-using ProductService.Domain.Products;
 
-namespace ProductService.Application.Features.Queries.Products;
+namespace ProductService.Application.Features.Products.Queries.GetList;
 
-public class GetProductListQueryHandler : IRequestHandler<GetProductListQuery, PagedResponse<List<ProductDto>>>
+public class ListProductsQueryHandler : IRequestHandler<ListProductsQuery, PagedResponse<List<ProductDto>>>
 {
     private readonly IMapper _mapper;
     private readonly IProductReadOnlyRepository _readOnlyrepository;
-    public GetProductListQueryHandler(IMapper mapper,
+    public ListProductsQueryHandler(IMapper mapper,
                                       IProductReadOnlyRepository readOnlyrepository)
     {
         _mapper = mapper;
         _readOnlyrepository = readOnlyrepository;
     }
-    public async Task<PagedResponse<List<ProductDto>>> Handle(GetProductListQuery query, CancellationToken cancellationToken)
+    public async Task<PagedResponse<List<ProductDto>>> Handle(ListProductsQuery query, CancellationToken cancellationToken)
     {
         var pagedData = await _readOnlyrepository.GetPageAsync(query.Filter);
         var result = _mapper.Map<PagedResponse<List<ProductDto>>>(pagedData);

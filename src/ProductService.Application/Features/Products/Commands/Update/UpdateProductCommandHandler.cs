@@ -1,9 +1,8 @@
 ﻿using MediatR;
-using SharedLibrary.CQRS.UseCases.Products.UpdateProduct;
+using ProductService.Domain.Exceptions.Products;
 using ProductService.Domain.Products;
-using SharedLibrary.Exceptions.Products;
 
-namespace ProductService.Application.Features.Commands.Products;
+namespace ProductService.Application.Features.Products.Commands.Update;
 
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 {
@@ -35,8 +34,8 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
         }
         product.Note = input.Note;
         product.CostPrice = input.CostPrice;
-        product.Images = input.Images;
-        
+        //product.Images = input.Images;
+
         await _repository.Update(product);
     }
 }

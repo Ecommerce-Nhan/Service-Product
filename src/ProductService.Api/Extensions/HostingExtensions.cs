@@ -5,7 +5,7 @@ using SharedLibrary.CQRS;
 using ProductService.Infrastructure;
 using Serilog;
 using SharedLibrary.Extentions;
-using Amazon.S3;
+using Hangfire;
 
 namespace ProductService.Api.Extensions;
 
@@ -13,20 +13,24 @@ internal static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        // Host Configuration
         builder.Host.UseSerilog();
         builder.Host.AddAutoFacConfiguration();
 
+        // Default Configuration
         builder.Services.AddControllers();
         builder.Services.AddHttpClient();
+        builder.Services.AddValidatorsFromAssembly(typeof(BaseRequest).Assembly);
+        builder.Services.AddAutoMapper(typeof(ProductAutoMapperProfile).Assembly);
+
+        // Custom Configuration
         builder.Services.AddSwaggerConfiguration();
         builder.Services.AddDatabaseConfiguration(builder.Configuration);
         builder.Services.AddMediatRConfiguration();
-        builder.Services.AddValidatorsFromAssembly(typeof(BaseRequest).Assembly);
-        builder.Services.AddAutoMapper(typeof(ProductAutoMapperProfile).Assembly);
         builder.Services.AddRedisCacheConfiguration();
         builder.Services.AddHandleException();
-        builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-        builder.Services.AddAWSService<IAmazonS3>();
+        builder.Services.AddAWSConfiguration(builder.Configuration);
+        builder.Services.AddHangfireConfiguration(builder.Configuration);
 
         return builder.Build();
     }
@@ -47,6 +51,7 @@ internal static class HostingExtensions
             {
                 options.DisplayRequestDuration();
             });
+            app.UseHangfireDashboard();
         }
 
         app.UseExceptionHandler("/error");

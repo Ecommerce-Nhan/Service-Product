@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using ProductService.Domain.Variants;
-using SharedLibrary.CQRS.UseCases.Variants.CreateVariant;
 
-namespace VariantService.Application.Features.Commands.Variants;
+namespace ProductService.Application.Features.Variants.Commands.Create;
 
 public class CreateVariantCommandHandler : IRequestHandler<CreateVariantCommand, Guid>
 {

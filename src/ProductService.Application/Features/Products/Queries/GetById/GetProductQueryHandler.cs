@@ -2,10 +2,9 @@
 using AutoMapper;
 using SharedLibrary.Dtos.Products;
 using ProductService.Domain.Products;
-using SharedLibrary.CQRS.UseCases.Products.GetProductById;
-using SharedLibrary.Exceptions.Products;
+using ProductService.Domain.Exceptions.Products;
 
-namespace ProductService.Application.Features.Queries.Products;
+namespace ProductService.Application.Features.Products.Queries.GetById;
 
 public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDto>
 {

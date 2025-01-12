@@ -1,6 +1,4 @@
-﻿using ProductService.Domain.Products;
-using SharedLibrary.Exceptions;
-using SharedLibrary.Exceptions.Products;
+﻿using SharedLibrary.Exceptions;
 
 namespace ProductService.Domain.Variants;
 

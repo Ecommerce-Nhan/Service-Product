@@ -1,8 +1,8 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SharedLibrary.CQRS.UseCases.Variants.CreateVariant;
-using SharedLibrary.CQRS.UseCases.Variants.GetVariantByProductId;
+using ProductService.Application.Features.Variants.Commands.Create;
+using ProductService.Application.Features.Variants.Queries.GetList;
 using SharedLibrary.Dtos.Variants;
 
 namespace ProductService.Api.Controllers.v1;
@@ -19,9 +19,9 @@ public class VariantController : ControllerBase
     }
 
     [HttpGet("GetVariantListByProductId")]
-    public async Task<IActionResult> GetVariantListByProductId([FromQuery] GetVariantListQuery model)
+    public async Task<IActionResult> GetVariantListByProductId([FromQuery] ListVariantsQuery model)
     {
-        var query = new GetVariantListQuery(model.ProductId, model.Filter);
+        var query = new ListVariantsQuery(model.ProductId, model.Filter);
         var result = await _sender.Send(query);
         return Ok(result);
     }

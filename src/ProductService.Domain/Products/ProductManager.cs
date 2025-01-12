@@ -1,6 +1,5 @@
-﻿using SharedLibrary.Exceptions;
-using SharedLibrary.Exceptions.Products;
-using System.Xml.Linq;
+﻿using ProductService.Domain.Exceptions.Products;
+using SharedLibrary.Exceptions;
 
 namespace ProductService.Domain.Products;
 
@@ -14,7 +13,7 @@ public class ProductManager
     public async Task<Product> CreateAsync(string name,
                          string code,
                          string? note,
-                         float costPrice,
+                         decimal costPrice,
                          List<string>? images)
     {
         var existingEntity = await _repository.FindByCodeAsync(code);

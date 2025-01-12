@@ -1,11 +1,11 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SharedLibrary.CQRS.UseCases.Products.CreateProduct;
-using SharedLibrary.CQRS.UseCases.Products.DeleteProduct;
-using SharedLibrary.CQRS.UseCases.Products.GetListProducts;
-using SharedLibrary.CQRS.UseCases.Products.GetProductById;
-using SharedLibrary.CQRS.UseCases.Products.UpdateProduct;
+using ProductService.Application.Features.Products.Commands.Create;
+using ProductService.Application.Features.Products.Commands.Delete;
+using ProductService.Application.Features.Products.Commands.Update;
+using ProductService.Application.Features.Products.Queries.GetById;
+using ProductService.Application.Features.Products.Queries.GetList;
 using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Api.Controllers.v1;
@@ -22,15 +22,15 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("GetAll")]
-    public async Task<IActionResult> GetAll([FromQuery] GetProductListQuery model)
+    public async Task<IActionResult> GetAll([FromQuery] ListProductsQuery model)
     {
-        var query = new GetProductListQuery(model.Sort, model.Filter);
+        var query = new ListProductsQuery(model.Sort, model.Filter);
         var result = await _sender.Send(query);
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateProductDto model)
+    public async Task<IActionResult> Post([FromForm] CreateProductDto model)
     {
         var command = new CreateProductCommand(model);
         var result = await _sender.Send(command);

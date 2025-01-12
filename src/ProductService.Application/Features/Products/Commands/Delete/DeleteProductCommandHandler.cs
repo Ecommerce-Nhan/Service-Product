@@ -1,9 +1,8 @@
 ﻿using MediatR;
-using SharedLibrary.CQRS.UseCases.Products.DeleteProduct;
+using ProductService.Domain.Exceptions.Products;
 using ProductService.Domain.Products;
-using SharedLibrary.Exceptions.Products;
 
-namespace ProductService.Application.Features.Commands.Products;
+namespace ProductService.Application.Features.Products.Commands.Delete;
 
 public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
 {
