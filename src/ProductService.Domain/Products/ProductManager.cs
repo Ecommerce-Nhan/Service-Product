@@ -13,8 +13,8 @@ public class ProductManager
     public async Task<Product> CreateAsync(string name,
                          string code,
                          string? note,
-                         decimal costPrice,
-                         List<string>? images)
+                         decimal costPrice)
+                         //List<string>? images)
     {
         var existingEntity = await _repository.FindByCodeAsync(code);
         if (existingEntity != null)
@@ -33,7 +33,7 @@ public class ProductManager
             Code = code,
             Note = note,
             CostPrice = costPrice,
-            Images = images
+            //Images = images
         };
     }
 

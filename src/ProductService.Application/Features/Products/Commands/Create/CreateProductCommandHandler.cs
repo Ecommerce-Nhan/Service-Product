@@ -25,55 +25,46 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
                                    CancellationToken cancellationToken)
     {
         var input = command.Model;
-        var bucketName = Constants.ProductService.BucketName;
-        var prefix = $"Products/Product-{input.Code}";
-        var listUriImages = input.Images != null && input.Images.Any()
-                            ? GenerateImagePlaceholders(input.Images, bucketName, prefix)
-                            : null;
         var product = await _manager.CreateAsync(
                 input.Name,
                 input.Code,
                 input.Note,
-                input.CostPrice,
-                listUriImages
+                input.CostPrice
             );
         await _repository.AddAsync(product);
-        BackgroundJob.Enqueue(() => UploadFileToS3(input.Images, bucketName, prefix));
+        if (input.Images != null)
+        {
+            await HandleTempFiles(input.Images, input.Code);
+        }
 
         return product.Id;
     }
-    private List<string> GenerateImagePlaceholders(IEnumerable<IFormFile> images,
-                                                   string bucketName,
-                                                   string prefix)
+    private async Task HandleTempFiles(IEnumerable<IFormFile> inputImages, string code)
     {
-        var result = images.Select(file =>
+        var bucketName = Constants.ProductService.BucketName;
+        var prefix = $"Products/Product-{code}";
+        foreach (var image in inputImages)
         {
-            var key = string.IsNullOrEmpty(prefix) ? file.FileName
-                                                   : $"{prefix.TrimEnd('/')}/{file.FileName}";
-            return $"{bucketName}/{key}";
-        });
-        return result.ToList();
-    }
-    public async Task UploadFileToS3(IEnumerable<IFormFile>? images,
-                                                 string bucketName,
-                                                 string prefix)
-    {
-        if (images != null && images.Any())
-        {
-            foreach (var file in images)
+            if (!image.ContentType.StartsWith("image/"))
             {
-                if (!file.ContentType.StartsWith("image/"))
-                    throw new Exception("Invalid File Format. We support only Images.");
-
-                var request = new PutObjectRequest()
-                {
-                    BucketName = bucketName,
-                    Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
-                    InputStream = file.OpenReadStream(),
-                };
-                request.Metadata.Add("Content-Type", file.ContentType);
-                await _s3Service.UploadToS3BucketAsync(request);
+                throw new Exception("Invalid File Format. We support only Images.");
             }
+            using var memoryStream = new MemoryStream();
+            await image.CopyToAsync(memoryStream);
+            var imageData = memoryStream.ToArray();
+            //
+            var fileName = image.FileName;
+            var key = string.IsNullOrEmpty(prefix) ? fileName : $"{prefix?.TrimEnd('/')}/{fileName}";
+            var request = new PutObjectRequest()
+            {
+                BucketName = bucketName,
+                Key = key,
+                InputStream = image.OpenReadStream(),
+            };
+            request.Metadata.Add("Content-Type", image.ContentType);
+            BackgroundJob.Enqueue<IS3Service>(service => service.UploadToS3BucketAsync(bucketName, key, imageData, image.ContentType));
         }
+
+        await Task.CompletedTask;
     }
 }

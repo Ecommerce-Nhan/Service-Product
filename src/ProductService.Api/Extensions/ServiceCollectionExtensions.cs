@@ -16,6 +16,7 @@ using ProductService.Application.Features.Products.Commands.Create;
 using ProductService.Application.Services.S3;
 using SharedLibrary.Exceptions;
 using ProductService.Domain.Exceptions.Products;
+using System.Reflection;
 
 namespace ProductService.Api.Extensions;
 

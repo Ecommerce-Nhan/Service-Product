@@ -1,5 +1,9 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
+using MassTransit.Caching.Internals;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Net.Mime;
 
 namespace ProductService.Application.Services.S3;
 
@@ -21,8 +25,17 @@ public class S3Service : IS3Service
         };
         return (s3Object.ResponseStream, s3Object.Headers.ContentType);
     }
-    public async Task<string> UploadToS3BucketAsync(PutObjectRequest request)
+    public async Task<string> UploadToS3BucketAsync(string bucketName, string key, byte[] data, string contentType)
     {
+        using var stream = new MemoryStream(data);
+
+        var request = new PutObjectRequest
+        {
+            BucketName = bucketName,
+            Key = key,
+            InputStream = stream,
+            ContentType = contentType
+        };
         await _s3Client.PutObjectAsync(request);
         string uriObject = $"{request.BucketName}/{request.Key}";
 

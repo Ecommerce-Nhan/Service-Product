@@ -38,15 +38,15 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Put([FromBody] UpdateProductDto model)
+    public async Task<IActionResult> Put([FromForm] UpdateProductDto model)
     {
         var command = new UpdateProductCommand(model);
         await _sender.Send(command);
         return NoContent();
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] Guid id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
     {
         var command = new DeleteProductCommand(id);
         await _sender.Send(command);
