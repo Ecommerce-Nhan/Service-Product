@@ -60,9 +60,9 @@ public static class ServiceCollectionExtensions
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(assemblies);
-            cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
+            //cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
-            cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
+            //cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
         });
 
         return services;

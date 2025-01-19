@@ -2,6 +2,7 @@
 using MediatR;
 using ProductService.Application.Services.S3;
 using SharedLibrary.Helpers;
+using System.Buffers;
 
 namespace ProductService.Application.Features.Products.Notifications;
 
@@ -11,6 +12,9 @@ public class UploadImagesToS3Handler : INotificationHandler<ProductCreatedNotifi
     {
         var bucketName = Constants.ProductService.BucketName;
         var prefix = $"Products/Product-{notification.model.Code}";
+        var bufferPool = ArrayPool<byte>.Shared;
+        var uploadTasks = new List<Task>();
+
         notification.entity.Images = new List<string>();
 
         foreach (var image in notification.model.Images)
@@ -19,15 +23,21 @@ public class UploadImagesToS3Handler : INotificationHandler<ProductCreatedNotifi
             {
                 throw new Exception("Invalid File Format. We support only Images.");
             }
-            using var memoryStream = new MemoryStream();
-            await image.CopyToAsync(memoryStream);
-            var imageData = memoryStream.ToArray();
             var fileName = image.FileName;
             var key = string.IsNullOrEmpty(prefix) ? fileName : $"{prefix?.TrimEnd('/')}/{fileName}";
             notification.entity.Images.Add($"{bucketName}/{key}");
 
-            BackgroundJob.Enqueue<IS3Service>(service => 
-                        service.UploadToS3BucketAsync(bucketName, key, imageData, image.ContentType));
+            var buffer = bufferPool.Rent((int)image.Length);
+            using (var memoryStream = new MemoryStream(buffer))
+            {
+                await image.CopyToAsync(memoryStream, cancellationToken);
+                var imageData = memoryStream.ToArray();
+
+                uploadTasks.Add(Task.Run(() => BackgroundJob.Enqueue<IS3Service>(service =>
+                        service.UploadToS3BucketAsync(bucketName, key, imageData, image.ContentType))));
+            }
+            bufferPool.Return(buffer);
         }
+        await Task.WhenAll(uploadTasks);
     }
 }
