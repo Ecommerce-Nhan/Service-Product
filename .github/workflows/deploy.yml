@@ -21,7 +21,7 @@ jobs:
 
       - name: 📁 Create .nuget directory and copy NuGet.config
         run: |
-            mkdir -p ~/.nuget && cp ./src/ProductService.Domain/NuGet.config ~/.nuget/NuGet/NuGet.Config
+            mkdir -p ~/.nuget/NuGet && cp ./src/ProductService.Domain/NuGet.config ~/.nuget/NuGet/NuGet.Config
       - name: List NuGet sources
         run: dotnet nuget list source && ls -l ~/.nuget/NuGet
 
