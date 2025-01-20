@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductService.Domain.Abtractions;
+using SharedLibrary.Repositories.Abtractions;
 
 namespace ProductService.Infrastructure.Repositories;
 

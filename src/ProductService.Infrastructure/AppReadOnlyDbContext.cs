@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductService.Domain.Products;
+using ProductService.Domain.Variants;
 
 namespace ProductService.Infrastructure;
 
@@ -17,4 +18,5 @@ public class AppReadOnlyDbContext : DbContext
         opts.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Variant> Variants { get; set; }
 }

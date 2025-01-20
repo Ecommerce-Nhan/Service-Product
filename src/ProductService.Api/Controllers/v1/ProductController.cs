@@ -1,12 +1,12 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Common.CQRS.UseCases.Products.CreateProduct;
-using ProductService.Common.CQRS.UseCases.Products.DeleteProduct;
-using ProductService.Common.CQRS.UseCases.Products.GetListProducts;
-using ProductService.Common.CQRS.UseCases.Products.GetProductById;
-using ProductService.Common.CQRS.UseCases.Products.UpdateProduct;
-using ProductService.Common.Dtos.Products;
+using ProductService.Application.Features.Products.Commands.Create;
+using ProductService.Application.Features.Products.Commands.Delete;
+using ProductService.Application.Features.Products.Commands.Update;
+using ProductService.Application.Features.Products.Queries.GetById;
+using ProductService.Application.Features.Products.Queries.GetList;
+using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Api.Controllers.v1;
 
@@ -22,15 +22,15 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("GetAll")]
-    public async Task<IActionResult> GetAll([FromQuery] GetProductListQuery model)
+    public async Task<IActionResult> GetAll([FromQuery] ListProductsQuery model)
     {
-        var query = new GetProductListQuery(model.Sort, model.Filter);
+        var query = new ListProductsQuery(model.Sort, model.Filter);
         var result = await _sender.Send(query);
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateProductDto model)
+    public async Task<IActionResult> Post([FromForm] CreateProductDto model)
     {
         var command = new CreateProductCommand(model);
         var result = await _sender.Send(command);
@@ -38,15 +38,15 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Put([FromBody] UpdateProductDto model)
+    public async Task<IActionResult> Put([FromForm] UpdateProductDto model)
     {
         var command = new UpdateProductCommand(model);
         await _sender.Send(command);
         return NoContent();
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] Guid id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
     {
         var command = new DeleteProductCommand(id);
         await _sender.Send(command);
