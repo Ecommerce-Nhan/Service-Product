@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - dev
 
 jobs:
   build:
@@ -18,8 +19,9 @@ jobs:
         with:
           dotnet-version: 9.x
 
-      - name: 📁 Copy NuGet.config to NuGet directory
-        run: cp ./src/ProductService.Domain/NuGet.config ~/.nuget/NuGet.Config
+      - name: 📁 Create .nuget directory and copy NuGet.config
+        run: |
+            mkdir -p ~/.nuget && cp ./src/ProductService.Domain/NuGet.config ~/.nuget/NuGet.Config
 
       - name: 🏗️ Restore Dependencies
         run: dotnet restore ./src/ProductService.Api/ProductService.Api.sln
