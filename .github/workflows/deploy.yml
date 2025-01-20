@@ -22,6 +22,8 @@ jobs:
       - name: 📁 Create .nuget directory and copy NuGet.config
         run: |
             mkdir -p ~/.nuget && cp ./src/ProductService.Domain/NuGet.config ~/.nuget/NuGet.Config
+      - name: List NuGet sources
+        run: dotnet nuget list source
 
       - name: 🏗️ Restore Dependencies
         run: dotnet restore ./src/ProductService.Api/ProductService.Api.sln
