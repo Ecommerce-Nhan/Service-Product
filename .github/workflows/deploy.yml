@@ -8,48 +8,57 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: 🛠️ Checkout Repository
         uses: actions/checkout@v4
+
       - name: ⚙️ Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.x
+
+      - name: 📁 Copy NuGet.config to NuGet directory
+        run: cp ./src/ProductService.Domain/NuGet.config ~/.nuget/NuGet.Config
+
+      - name: 🏗️ Restore Dependencies
+        run: dotnet restore ./src/ProductService.Api/ProductService.Api.sln
+
       - name: 🏗️ Clean Project
         run: dotnet clean ./src/ProductService.Api/ProductService.Api.sln
+
       - name: 🏗️ Build Project
         run: dotnet build ./src/ProductService.Api/ProductService.Api.sln
 
-  publish:
-    needs: build
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🛠️ Checkout Repository
-        uses: actions/checkout@v4
+  # publish:
+  #   needs: build
+  #   if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: 🛠️ Checkout Repository
+  #       uses: actions/checkout@v4
 
-      - name: ⚙️ Setup .NET 9 SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.x
+  #     - name: ⚙️ Setup .NET 9 SDK
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: 9.x
 
-      - name: 🔐 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-1
-      - name: 🔑 Login to Amazon ECR
-        run: aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin ${{ secrets.REPOSITORY }}
-      - name: 📦 Build Docker Image
-        run: |
-          docker build -t product:latest .
-          docker tag product:latest ${{ secrets.REPOSITORY }}:latest
-      - name: 📦 Publish Docker Image to Amazon ECR
-        working-directory: ./src/
-        run: |
-          docker push ${{ secrets.REPOSITORY }}:latest
+  #     - name: 🔐 Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ap-southeast-1
+  #     - name: 🔑 Login to Amazon ECR
+  #       run: aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin ${{ secrets.REPOSITORY }}
+  #     - name: 📦 Build Docker Image
+  #       run: |
+  #         docker build -t product:latest .
+  #         docker tag product:latest ${{ secrets.REPOSITORY }}:latest
+  #     - name: 📦 Publish Docker Image to Amazon ECR
+  #       working-directory: ./src/
+  #       run: |
+  #         docker push ${{ secrets.REPOSITORY }}:latest
 
 #   deploy:
 #     needs: publish
