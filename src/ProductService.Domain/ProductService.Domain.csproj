@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharedLibrary" Version="1.0.0" />
+	  <PackageReference Include="SharedLibrary" Version="1.0.0">
+		  <PackageSource>https://nuget.pkg.github.com/nhanne/index.json</PackageSource>
+	  </PackageReference>
   </ItemGroup>
 
 </Project>
