@@ -16,57 +16,11 @@ using ProductService.Application.Features.Products.Commands.Create;
 using ProductService.Application.Services.S3;
 using SharedLibrary.Exceptions;
 using ProductService.Domain.Exceptions.Products;
-using System.Reflection;
 
 namespace ProductService.Api.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
-    {
-        services.AddApiVersioning(cfg =>
-        {
-            cfg.DefaultApiVersion = new ApiVersion(1, 0);
-            cfg.AssumeDefaultVersionWhenUnspecified = true;
-            cfg.ReportApiVersions = true;
-        });
-        services.AddSwaggerGen(cfg =>
-        {
-            cfg.SwaggerDoc("v1", new OpenApiInfo { 
-                                     Title = "Product API v1.0", 
-                                     Version = "v1.0", 
-                                     Description = "Development by TTNhan" 
-                                 });
-        });
-
-        return services;
-    }
-    public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-        var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
-        services.AddDbContext<AppDbContext>(o => o.UseNpgsql(connectionStringBuilder.ConnectionString));
-        services.AddDbContext<AppReadOnlyDbContext>(o => o.UseNpgsql(connectionStringBuilder.ConnectionString));
-
-        return services;
-    }
-    public static IServiceCollection AddMediatRConfiguration(this IServiceCollection services)
-    {
-        var assemblies = new[]
-        {
-            typeof(CreateProductCommand).Assembly,
-            typeof(CreateProductCommandHandler).Assembly,
-        };
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssemblies(assemblies);
-            //cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
-            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
-            //cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
-        });
-
-        return services;
-    }
     public static IHostBuilder AddAutoFacConfiguration(this IHostBuilder host)
     {
         host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -97,6 +51,65 @@ public static class ServiceCollectionExtensions
 
         return host;
     }
+    public static IServiceCollection AddHandleException(this IServiceCollection services)
+    {
+        services.AddExceptionHandler<ProductExceptionHandler>();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
+        return services;
+    }
+    public static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
+    {
+        services.AddApiVersioning(cfg =>
+        {
+            cfg.DefaultApiVersion = new ApiVersion(1, 0);
+            cfg.AssumeDefaultVersionWhenUnspecified = true;
+            cfg.ReportApiVersions = true;
+        });
+        services.AddSwaggerGen(cfg =>
+        {
+            cfg.SwaggerDoc("v1", new OpenApiInfo { 
+                                     Title = "Product API v1.0", 
+                                     Version = "v1.0", 
+                                     Description = "Development by TTNhan" 
+                                 });
+        });
+
+        return services;
+    }
+    public static IServiceCollection AddMediatRConfiguration(this IServiceCollection services)
+    {
+        var assemblies = new[]
+        {
+            typeof(CreateProductCommand).Assembly,
+            typeof(CreateProductCommandHandler).Assembly,
+        };
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblies(assemblies);
+            //cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            //cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
+        });
+
+        return services;
+    }
+    public static IServiceCollection AddAWSConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDefaultAWSOptions(configuration.GetAWSOptions());
+        services.AddAWSService<IAmazonS3>();
+
+        return services;
+    }
+    public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+        services.AddDbContext<AppDbContext>(o => o.UseNpgsql(connectionStringBuilder.ConnectionString));
+        services.AddDbContext<AppReadOnlyDbContext>(o => o.UseNpgsql(connectionStringBuilder.ConnectionString));
+
+        return services;
+    }
     public static IServiceCollection AddHangfireConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -116,20 +129,6 @@ public static class ServiceCollectionExtensions
                                               })
                         );
         services.AddHangfireServer();
-
-        return services;
-    }
-    public static IServiceCollection AddAWSConfiguration(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-        services.AddAWSService<IAmazonS3>();
-
-        return services;
-    }
-    public static IServiceCollection AddHandleException(this IServiceCollection services)
-    {
-        services.AddExceptionHandler<ProductExceptionHandler>();
-        services.AddExceptionHandler<GlobalExceptionHandler>();
 
         return services;
     }
