@@ -3,8 +3,6 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-ARG GITHUB_USERNAME
-ARG GITHUB_TOKEN
 COPY ["certificate.pfx", ""]
 
 ENV ASPNETCORE_ENVIRONMENT=Development
@@ -14,6 +12,8 @@ ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certificate.pfx
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
+ARG GITHUB_USERNAME
+ARG GITHUB_TOKEN
 WORKDIR /src
 COPY src/ .
 
