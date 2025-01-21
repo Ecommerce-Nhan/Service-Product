@@ -58,13 +58,14 @@ jobs:
 
       - name: 📦 Build Docker Image
         run: |
-          docker build -t product:ver-$GITHUB_RUN_ID" .
-          docker tag product:ver-$GITHUB_RUN_ID" ${{ secrets.REPOSITORY }}:ver-$GITHUB_RUN_ID
+          docker build -t "product:ver-$GITHUB_RUN_ID" .
+          docker tag "product:ver-$GITHUB_RUN_ID" "${{ secrets.REPOSITORY }}:ver-$GITHUB_RUN_ID"
 
       - name: 📦 Publish Docker Image to Amazon ECR
         working-directory: ./src/
         run: |
-          docker push ${{ secrets.REPOSITORY }}:ver-$GITHUB_RUN_ID
+          docker push "${{ secrets.REPOSITORY }}:ver-$GITHUB_RUN_ID"
+
 
 #   deploy:
 #     needs: publish
