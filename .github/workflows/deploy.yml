@@ -59,8 +59,8 @@ jobs:
       - name: 📦 Build Docker Image
         run: |
           docker build \
-            --build-arg GITHUB_USERNAME=${{ secrets.GITHUB_USERNAME }} \
-            --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            --build-arg GITHUB_USERNAME=${{ github.actor }} \
+            --build-arg GITHUB_TOKEN=${{ secrets.GH_TOKEN }} \
             -t "product:ver-$GITHUB_RUN_ID" .
           docker tag "product:ver-$GITHUB_RUN_ID" "${{ secrets.REPOSITORY }}:ver-$GITHUB_RUN_ID"
 
