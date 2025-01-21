@@ -28,9 +28,14 @@ services:
     build:
         context: .
         dockerfile: Dockerfile
+        args:
+          GITHUB_USERNAME: nhanne
+          GITHUB_TOKEN: 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
     ports:
       - "8080:80"
       - "8091:443"
+    env_file:
+      - .env
     depends_on:
       postgres:
         condition: service_healthy
