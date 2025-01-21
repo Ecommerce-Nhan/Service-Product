@@ -2,7 +2,8 @@
 
 ## Overview
 The **Product Service** is a .NET-based microservice designed to manage product-related data and operations. It is built using .NET Core, follows clean architecture principles, and leverages AWS for cloud infrastructure. The service supports image upload, resizing, and storage functionalities and is containerized for deployment in an ECS Cluster using CI/CD pipelines.
-
+Overall Microservice System Design: https://app.eraser.io/workspace/ZuxJp0sPbJ4zaCz4Pmvn?origin=share
+=======
 ---
 
 ## Architecture
@@ -27,7 +28,7 @@ The **Product Service** is a .NET-based microservice designed to manage product-
 
 ![product-service](https://github.com/user-attachments/assets/00e3ed2b-5af8-4ae5-bb50-225bbf896bb6)
 
-
+=======
 ---
 
 ## Prerequisites
@@ -36,6 +37,8 @@ The **Product Service** is a .NET-based microservice designed to manage product-
   - Docker
   - AWS CLI configured with appropriate IAM permissions
   
+=======
+ 
 - **Cloud Resources**:
   - AWS Account with access to ECR, ECS, S3, Lambda, CloudWatch, and CloudFront
 
@@ -59,6 +62,7 @@ The **Product Service** is a .NET-based microservice designed to manage product-
        "Profile": "<profile-name>",
        "Region": "<region-name>",
        "CloudFrontDistribution": "<distribution-id>"
+
      }
    }
    ```
@@ -128,4 +132,3 @@ Triggers updates in the ECS services to deploy the latest images.
 
 ## Authors
 © Developed by Tran Thanh Nhan.
-
