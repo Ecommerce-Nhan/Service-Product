@@ -19,14 +19,15 @@ jobs:
         with:
           dotnet-version: 9.x
 
-      - name: ️🏏 Clean Project
-        run: dotnet clean ./src/ProductService.Api/ProductService.Api.sln
+      - name: ️🔐 Authorization
+        run: |
+            dotnet nuget add source "https://nuget.pkg.github.com/nhanne/index.json" --name github --username ${{ github.actor }} --password ${{ secrets.GH_TOKEN }}
 
-      - name: 📁 Restore Packages
-        run: dotnet restore ./src/ProductService.Api/ProductService.Api.sln
-
-      - name: 🏗️ Build Project
-        run: dotnet build ./src/ProductService.Api/ProductService.Api.sln
+      - name: ️📁 Build Project
+        run: |
+          dotnet clean ./src/ProductService.Api/ProductService.Api.sln
+          dotnet restore ./src/ProductService.Api/ProductService.Api.sln
+          dotnet build ./src/ProductService.Api/ProductService.Api.sln
 
   # publish:
   #   needs: build
