@@ -3,6 +3,8 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ARG GITHUB_USERNAME
+ARG GITHUB_TOKEN
 COPY ["certificate.pfx", ""]
 
 ENV ASPNETCORE_ENVIRONMENT=Development
@@ -15,6 +17,11 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY src/ .
 
+RUN dotnet nuget add source \
+    --username $GITHUB_USERNAME \
+    --password $GITHUB_TOKEN \
+    --store-password-in-clear-text \
+    --name github "https://nuget.pkg.github.com/$GITHUB_USERNAME/index.json"
 RUN dotnet restore "ProductService.Api/ProductService.Api.csproj"
 
 WORKDIR "/src/ProductService.Api"
