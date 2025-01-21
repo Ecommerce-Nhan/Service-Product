@@ -21,7 +21,11 @@ jobs:
 
       - name: ️🔐 Authorization
         run: |
-            dotnet nuget add source "https://nuget.pkg.github.com/nhanne/index.json" --name github --username ${{ github.actor }} --password ${{ secrets.GH_TOKEN }}
+            dotnet nuget add source \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.GH_TOKEN }} \
+            --store-password-in-clear-text \
+            --name github "https://nuget.pkg.github.com/nhanne/index.json"
 
       - name: ️📁 Build Project
         run: |
