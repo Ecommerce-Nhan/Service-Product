@@ -31,8 +31,8 @@ jobs:
       - name: 🏗️ Clean Project
         run: dotnet clean ./src/ProductService.Api/ProductService.Api.sln
 
-      - name: 🏗️ Restore Packages
-        run: dotnet restore ./src/ProductService.Api/ProductService.Api.sln --verbosity detailed
+      # - name: 🏗️ Restore Packages
+      #   run: dotnet restore ./src/ProductService.Api/ProductService.Api.sln --verbosity detailed
 
       - name: 🏗️ Build Project
         run: dotnet build ./src/ProductService.Api/ProductService.Api.sln
