@@ -43,6 +43,7 @@ internal static class HostingExtensions
         builder.Host.AddAutoFacConfiguration();
 
         // Default Configuration
+        builder.Services.AddJWTConfiguration(builder.Configuration);
         builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
         builder.Services.AddControllers();
         builder.Services.AddHttpClient();
@@ -62,6 +63,8 @@ internal static class HostingExtensions
     }
     public static WebApplication ConfigurePipeline(this WebApplication app, WebApplicationBuilder builder)
     {
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.ConfigureDevelopment();
         app.CheckHealthy();
         app.UseExceptionHandler("/error");
