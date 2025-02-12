@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ProductService.Api.Controllers.v1;
 using ProductService.Application.Features.Products.Queries.GetById;
-using ProductService.Domain.Products;
 using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Api.Test.Controllers;
@@ -40,8 +39,8 @@ public class ProductControllerTest
     {
         // Arrange
         var productId = Guid.NewGuid();
-        _mockSender.Setup(sender => sender.Send(It.IsAny<GetProductQuery>(), default))
-            .ReturnsAsync((ProductDto?)null); 
+        //_mockSender.Setup(sender => sender.Send(It.IsAny<GetProductQuery>(), default))
+        //    .ReturnsAsync((ProductDto?)null);
 
         // Act
         var result = await _controller.GetById(productId);

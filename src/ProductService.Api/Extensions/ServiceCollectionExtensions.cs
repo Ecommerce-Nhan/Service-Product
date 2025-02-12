@@ -19,6 +19,7 @@ using ProductService.Domain.Exceptions.Products;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ProductService.Api.Extensions;
 
@@ -137,6 +138,7 @@ public static class ServiceCollectionExtensions
     }
     public static IServiceCollection AddJWTConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -146,7 +148,7 @@ public static class ServiceCollectionExtensions
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("IxrAjDoa2FqElO7IhrSrUJELhUckePEPVpaePlS_Xaw"));
             o.RequireHttpsMetadata = false;
-            o.SaveToken = false;
+            o.SaveToken = true; 
             o.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,

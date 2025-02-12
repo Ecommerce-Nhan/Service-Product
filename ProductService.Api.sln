@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipeline", "pipeline", "{D5
 		.github\workflows\deploy.yml = .github\workflows\deploy.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductService.Application.Test", "tests\ProductService.Application.Test\ProductService.Application.Test.csproj", "{694EA4C7-301E-4550-BD30-32EA86FA4E71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{6478D1C3-A16D-4DF1-B044-6896CF24D496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6478D1C3-A16D-4DF1-B044-6896CF24D496}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6478D1C3-A16D-4DF1-B044-6896CF24D496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{694EA4C7-301E-4550-BD30-32EA86FA4E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{694EA4C7-301E-4550-BD30-32EA86FA4E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{694EA4C7-301E-4550-BD30-32EA86FA4E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{694EA4C7-301E-4550-BD30-32EA86FA4E71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,5 +71,6 @@ Global
 		{F53EC5E7-7314-465A-976F-2F6B51B9389F} = {C94091A3-665C-4747-9524-530C5944A74B}
 		{FCE489BB-751B-4ED3-891F-E68BF85B9208} = {C94091A3-665C-4747-9524-530C5944A74B}
 		{6478D1C3-A16D-4DF1-B044-6896CF24D496} = {9DF326A3-4A87-497E-8922-1E4C67124093}
+		{694EA4C7-301E-4550-BD30-32EA86FA4E71} = {9DF326A3-4A87-497E-8922-1E4C67124093}
 	EndGlobalSection
 EndGlobal
