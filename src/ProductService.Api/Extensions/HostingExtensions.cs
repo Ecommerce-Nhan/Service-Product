@@ -76,7 +76,7 @@ internal static class HostingExtensions
     }
     private static WebApplication CheckHealthy(this WebApplication app)
     {
-        app.UseHealthChecks("/health", new HealthCheckOptions
+        app.UseHealthChecks("/api/v1/product/health", new HealthCheckOptions
         {
             ResponseWriter = async (context, report) =>
             {
@@ -101,7 +101,7 @@ internal static class HostingExtensions
     }
     private static WebApplication ConfigureDevelopment(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
+        if (!app.Environment.IsProduction())
         {
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();

@@ -1,13 +1,13 @@
 ﻿using Asp.Versioning;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProductService.Api.Authorize;
 using ProductService.Application.Features.Products.Commands.Create;
 using ProductService.Application.Features.Products.Commands.Delete;
 using ProductService.Application.Features.Products.Commands.Update;
 using ProductService.Application.Features.Products.Queries.GetById;
 using ProductService.Application.Features.Products.Queries.GetList;
+using ProductService.Application.Permissions;
 using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Api.Controllers.v1;
@@ -23,7 +23,7 @@ public class ProductController : ControllerBase
         _sender = sender;
     }
 
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ViewProductPermission")]
+    [PermissionAuthorize(ProductPermission.View)]
     [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll([FromQuery] ListProductsQuery model)
     {

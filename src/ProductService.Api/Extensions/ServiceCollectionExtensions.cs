@@ -1,25 +1,28 @@
-﻿using Npgsql;
-using Microsoft.EntityFrameworkCore;
-using ProductService.Infrastructure;
-using Microsoft.OpenApi.Models;
-using SharedLibrary.CQRS.Behaviors;
-using Autofac.Extensions.DependencyInjection;
-using Autofac;
-using ProductService.Infrastructure.Repositories;
-using ProductService.Domain.Products;
+﻿using Amazon.S3;
 using Asp.Versioning;
-using SharedLibrary.Repositories.Abtractions;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Hangfire;
 using Hangfire.PostgreSql;
-using Amazon.S3;
-using ProductService.Application.Features.Products.Commands.Create;
-using ProductService.Application.Services.S3;
-using SharedLibrary.Exceptions;
-using ProductService.Domain.Exceptions.Products;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.OpenApi.Models;
+using Npgsql;
+using ProductService.Api.Authorize;
+using ProductService.Application.Features.Products.Commands.Create;
+using ProductService.Application.Permissions;
+using ProductService.Application.Services.S3;
+using ProductService.Domain.Exceptions.Products;
+using ProductService.Domain.Products;
+using ProductService.Infrastructure;
+using ProductService.Infrastructure.Repositories;
+using SharedLibrary.CQRS.Behaviors;
+using SharedLibrary.Exceptions;
+using SharedLibrary.Repositories.Abtractions;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace ProductService.Api.Extensions;
 
@@ -152,21 +155,22 @@ public static class ServiceCollectionExtensions
             o.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateIssuer = false,
+                ValidateAudience = false,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
 
-                ValidIssuer = "https://localhost:5001/",
-                ValidAudience = "b865bfc2-9966-4309-93be-f0dcd2d7c59b",
+                //ValidIssuer = "https://localhost:5001/",
+                //ValidAudience = "b865bfc2-9966-4309-93be-f0dcd2d7c59b",
                 IssuerSigningKey = key,
             };
         });
-        services.AddAuthorization(opts =>
+        services.AddAuthorization(options =>
         {
-            opts.AddPolicy("ViewProductPermission", policy =>
-                                                    policy.RequireClaim("Permission", "Permissions.Products.View"));
+          
         });
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
         return services;
     }
