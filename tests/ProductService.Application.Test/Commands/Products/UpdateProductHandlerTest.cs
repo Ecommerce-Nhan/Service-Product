@@ -13,9 +13,9 @@ public class UpdateProductHandlerTest
     private readonly IProductReadOnlyRepository _readOnlyRepositoryMock;
     private readonly ProductManager _managerMock;
     private readonly UpdateProductCommandHandler _handler;
-    
+
     private static readonly Guid productID = Guid.NewGuid();
-    private static readonly UpdateProductDto input 
+    private static readonly UpdateProductDto input
         = new UpdateProductDto(productID, "name", "code", null, 10, new List<IFormFile>());
 
     public UpdateProductHandlerTest()
