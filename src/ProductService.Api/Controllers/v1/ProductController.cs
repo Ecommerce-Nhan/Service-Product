@@ -27,7 +27,7 @@ public class ProductController : ControllerBase
     [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll([FromQuery] ListProductsQuery model)
     {
-        var query = new ListProductsQuery(model.Sort, model.Filter);
+        var query = new ListProductsQuery(model.Filter, model.Pagination);
         var result = await _sender.Send(query);
         return Ok(result);
     }

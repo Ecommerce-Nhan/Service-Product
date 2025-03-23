@@ -18,7 +18,7 @@ public class ListProductsQueryHandler : IRequestHandler<ListProductsQuery, Paged
     }
     public async Task<PagedResponse<List<ProductDto>>> Handle(ListProductsQuery query, CancellationToken cancellationToken)
     {
-        var pagedData = await _readOnlyrepository.GetPageAsync(query.Filter);
+        var pagedData = await _readOnlyrepository.GetPageAsync(query.Pagination);
         var result = _mapper.Map<PagedResponse<List<ProductDto>>>(pagedData);
         return result;
     }
