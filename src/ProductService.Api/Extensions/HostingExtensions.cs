@@ -54,7 +54,7 @@ internal static class HostingExtensions
         builder.Services.AddHandleException();
         builder.Services.AddSwaggerConfiguration();
         builder.Services.AddMediatRConfiguration();
-        builder.Services.AddRedisCacheConfiguration();
+        builder.Services.AddRedis();
         builder.Services.AddAWSConfiguration(builder.Configuration);
         builder.Services.AddDatabaseConfiguration(builder.Configuration);
         builder.Services.AddHangfireConfiguration(builder.Configuration);
