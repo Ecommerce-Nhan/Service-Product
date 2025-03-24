@@ -1,24 +1,31 @@
 # Product Service README
 
+## ⚠️ Important Notes
+- A **GitHub Token** is required to access shared library packages from GitHub Package.
+- AWS **Access Token** must be configured properly.
+
+---
+
 ## Overview
-The **Product Service** is a .NET-based microservice designed to manage product-related data and operations. It is built using .NET Core, follows clean architecture principles, and leverages AWS for cloud infrastructure. The service supports image upload, resizing, and storage functionalities and is containerized for deployment in an ECS Cluster using CI/CD pipelines.
-Overall Microservice System Design: https://app.eraser.io/workspace/ZuxJp0sPbJ4zaCz4Pmvn?origin=share
-=======
+The **Product Service** is a .NET-based microservice designed to manage product-related data and operations. It is built using .NET Core, follows clean architecture principles, and leverages AWS for cloud infrastructure. The service supports image upload, resizing, and storage functionalities and is containerized for deployment in an **ECS Cluster** using CI/CD pipelines.
+
+[Overall Microservice System Design](https://app.eraser.io/workspace/ZuxJp0sPbJ4zaCz4Pmvn?origin=share)
+
 ---
 
 ## Architecture
 
-### Components:
-1. **AWS CloudWatch**: Monitors the service and logs application events.
-2. **AWS CloudFront**: Serves images from the S3 bucket as a CDN for faster delivery.
-3. **AWS Lambda**: Triggers and resizes images uploaded to the S3 bucket.
-4. **AWS S3**: Stores images uploaded by the Product Service.
-5. **Hangfire**: Manages background jobs like uploading images to S3.
-6. **PostgreSQL**: Used for storing product metadata.
-7. **ECS Cluster**: Hosts the containerized Product Service.
-8. **GitHub Actions**: CI/CD pipeline to build, test, and deploy the service.
+### Components
+1. **AWS CloudWatch** - Monitors the service and logs application events.
+2. **AWS CloudFront** - Serves images from the S3 bucket as a CDN for faster delivery.
+3. **AWS Lambda** - Triggers and resizes images uploaded to the S3 bucket.
+4. **AWS S3** - Stores images uploaded by the Product Service.
+5. **Hangfire** - Manages background jobs like uploading images to S3.
+6. **PostgreSQL** - Stores product metadata.
+7. **ECS Cluster** - Hosts the containerized Product Service.
+8. **GitHub Actions** - Automates CI/CD pipeline for build, test, and deployment.
 
-### Workflow:
+### Workflow
 1. Product metadata is stored in **PostgreSQL**.
 2. Image files are uploaded to **AWS S3** via the Product Service.
 3. **AWS Lambda** resizes images upon upload and updates the S3 bucket.
@@ -26,109 +33,108 @@ Overall Microservice System Design: https://app.eraser.io/workspace/ZuxJp0sPbJ4z
 5. **Hangfire** schedules and executes image uploads and other background tasks.
 6. Logs and metrics are monitored in **AWS CloudWatch**.
 
-![product-service](https://github.com/user-attachments/assets/00e3ed2b-5af8-4ae5-bb50-225bbf896bb6)
+![Product Service Architecture](https://github.com/user-attachments/assets/00e3ed2b-5af8-4ae5-bb50-225bbf896bb6)
 
-=======
 ---
 
 ## Prerequisites
-- **Development Environment**:
-  - .NET Core SDK 9.0
-  - Docker
-  - AWS CLI configured with appropriate IAM permissions
-  
-=======
- 
-- **Cloud Resources**:
-  - AWS Account with access to ECR, ECS, S3, Lambda, CloudWatch, and CloudFront
 
-- **Other Tools**:
-  - PostgreSQL instance
-  - GitHub repository
+### Development Environment
+- .NET Core SDK 9.0
+- Docker
+- AWS CLI configured with appropriate IAM permissions
+
+### Cloud Resources
+- AWS Account with access to **ECR, ECS, S3, Lambda, CloudWatch, and CloudFront**
+
+### Other Tools
+- PostgreSQL instance
+- GitHub repository
 
 ---
 
 ## Local Development (Docker)
 
-### Configuration:
-1. Edit `appsettings.Development.json` files with:
+### Configuration
+1. Edit `appsettings.Development.json` with:
    ```json
    {
      "ConnectionStrings": {
-       "DefaultConnection": "Host=<your-database-host>;Database=<db-name>;User Id=<username>;Password=<password>"
-       "ReadOnlyConnection": "Host=<your-database-host>;Database=<db-name>;User Id=<username>;Password=<password>",
+       "DefaultConnection": "Host=<your-database-host>;Database=<db-name>;User Id=<username>;Password=<password>",
+       "ReadOnlyConnection": "Host=<your-database-host>;Database=<db-name>;User Id=<username>;Password=<password>"
      },
      "AWS": {
        "Profile": "<profile-name>",
        "Region": "<region-name>",
        "CloudFrontDistribution": "<distribution-id>"
-
      }
    }
    ```
-
-2. Environment variables for sensitive configurations:
+2. Set environment variables for sensitive configurations:
    - AWS Access Key and Secret Key
    - Database credentials
 
-### Running Locally:
+### Running Locally
 1. Clone the repository:
    ```bash
-   git clone [<repo-url>](https://github.com/Ecommerce-Nhan/ProductService.git)
+   git clone https://github.com/Ecommerce-Nhan/ProductService.git
    ```
-2. Start docker desktop
-3. Run docker compose:
+2. Start Docker Desktop.
+3. Run Docker Compose:
    ```bash
    docker-compose up --build -d
    ```
-4. Use tools like Postman or Swagger UI to test APIs.
+4. Use Postman or Swagger UI to test APIs.
 
 ---
 
 ## Deployment
 
-### CI/CD Pipeline:
-The deployment process uses **GitHub Actions** to build, test, and deploy the application.
+### CI/CD Pipeline
+The deployment process is automated using **GitHub Actions** for build, test, and deployment.
 
-1. **CI/CD Workflow YAML** (stored in `.github/workflows/deploy.yml`):
-2. Push code changes to the master branch to trigger CI/CD.
+#### Deployment Steps:
+1. Push code changes to the **main branch** to trigger CI/CD.
+2. **GitHub Actions** runs the workflow defined in `.github/workflows/deploy.yml`.
+3. The pipeline builds and tests the Docker image.
+4. The image is pushed to **AWS ECR**.
+5. ECS tasks are updated to deploy the latest image.
 
-Deployment with Docker and AWS
-Docker Configuration
-The Product Service is containerized using Docker to ensure a consistent runtime environment.
-Dockerfiles are used to build the application image, containing all dependencies and configurations required for deployment.
-AWS Deployment Workflow
-ECR (Elastic Container Registry):
+### AWS Deployment Workflow
+#### **Docker Configuration**
+- The service is containerized using Docker for a consistent runtime environment.
+- The `Dockerfile` defines dependencies and configurations.
 
-Docker images are pushed to AWS Elastic Container Registry for storage and version control.
-The repository for both front-end and back-end services is maintained in ECR.
-ECS Cluster:
+#### **ECR (Elastic Container Registry)**
+- Stores Docker images with version control.
+- Separate repositories for frontend and backend services.
 
-The ECS Cluster runs the Docker containers for both front-end and back-end services.
-Each service has its own task definition specifying resource allocation (e.g., CPU, memory) and container configurations.
-ALB (Application Load Balancer):
+#### **ECS Cluster**
+- Runs Docker containers for both frontend and backend services.
+- Task definitions specify CPU, memory, and container configurations.
 
-Routes traffic based on defined rules:
-/ routes to the Front-end Service.
-/api/* routes to the Back-end Service.
-ALB supports HTTPS (port 443) and HTTP (port 80) for secure communication.
-S3 and CloudFront:
+#### **ALB (Application Load Balancer)**
+- Routes traffic based on defined rules:
+  - `/` → Frontend Service
+  - `/api/*` → Backend Service
+- Supports HTTPS (port 443) and HTTP (port 80).
 
-S3 is used to store static files and images uploaded by the Product Service.
-AWS CloudFront serves files from the S3 bucket, providing a Content Delivery Network (CDN) for fast and secure access.
-PostgreSQL:
+#### **S3 and CloudFront**
+- S3 stores static files and images.
+- CloudFront serves files via CDN for fast, secure access.
 
-A managed database service stores product-related metadata, connected securely to the ECS Cluster via a private endpoint within the VPC.
-CI/CD Pipeline:
+#### **PostgreSQL**
+- Managed database for product metadata.
+- Connected securely to the ECS Cluster via a private VPC endpoint.
 
-Managed using GitHub Actions, which:
-Builds and tests the Docker images.
-Pushes images to ECR.
-Triggers updates in the ECS services to deploy the latest images.
+#### **CI/CD Pipeline with GitHub Actions**
+- **Builds and tests** Docker images.
+- **Pushes images** to ECR.
+- **Deploys updates** to ECS services.
 
-![container](https://github.com/user-attachments/assets/92096c9e-acfc-4124-ae5c-9376092bf2c7)
+![Container Deployment](https://github.com/user-attachments/assets/92096c9e-acfc-4124-ae5c-9376092bf2c7)
 
 ---
 
 ## Authors
-© Developed by Tran Thanh Nhan.
+**© Developed by Tran Thanh Nhan.**
