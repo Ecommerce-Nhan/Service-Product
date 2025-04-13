@@ -29,9 +29,9 @@ jobs:
 
       - name: ️📁 Build Project
         run: |
-          dotnet clean ./src/ProductService.Api/ProductService.Api.sln
-          dotnet restore ./src/ProductService.Api/ProductService.Api.sln
-          dotnet build ./src/ProductService.Api/ProductService.Api.sln
+          dotnet clean ./ProductService.Api.sln
+          dotnet restore ./ProductService.Api.sln
+          dotnet build ./ProductService.Api.sln
 
   publish:
     needs: build

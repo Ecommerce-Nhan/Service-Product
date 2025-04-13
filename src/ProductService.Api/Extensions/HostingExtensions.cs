@@ -43,6 +43,7 @@ internal static class HostingExtensions
         builder.Host.AddAutoFacConfiguration();
 
         // Default Configuration
+        builder.Services.AddJWTConfiguration(builder.Configuration);
         builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
         builder.Services.AddControllers();
         builder.Services.AddHttpClient();
@@ -53,7 +54,7 @@ internal static class HostingExtensions
         builder.Services.AddHandleException();
         builder.Services.AddSwaggerConfiguration();
         builder.Services.AddMediatRConfiguration();
-        builder.Services.AddRedisCacheConfiguration();
+        builder.Services.AddRedis();
         builder.Services.AddAWSConfiguration(builder.Configuration);
         builder.Services.AddDatabaseConfiguration(builder.Configuration);
         builder.Services.AddHangfireConfiguration(builder.Configuration);
@@ -62,6 +63,8 @@ internal static class HostingExtensions
     }
     public static WebApplication ConfigurePipeline(this WebApplication app, WebApplicationBuilder builder)
     {
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.ConfigureDevelopment();
         app.CheckHealthy();
         app.UseExceptionHandler("/error");
@@ -73,7 +76,7 @@ internal static class HostingExtensions
     }
     private static WebApplication CheckHealthy(this WebApplication app)
     {
-        app.UseHealthChecks("/health", new HealthCheckOptions
+        app.UseHealthChecks("/api/v1/product/health", new HealthCheckOptions
         {
             ResponseWriter = async (context, report) =>
             {
@@ -98,7 +101,7 @@ internal static class HostingExtensions
     }
     private static WebApplication ConfigureDevelopment(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
+        if (!app.Environment.IsProduction())
         {
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();

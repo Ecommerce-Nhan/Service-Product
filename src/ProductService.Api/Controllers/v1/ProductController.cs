@@ -1,11 +1,13 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProductService.Api.Authorize;
 using ProductService.Application.Features.Products.Commands.Create;
 using ProductService.Application.Features.Products.Commands.Delete;
 using ProductService.Application.Features.Products.Commands.Update;
 using ProductService.Application.Features.Products.Queries.GetById;
 using ProductService.Application.Features.Products.Queries.GetList;
+using ProductService.Application.Permissions;
 using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Api.Controllers.v1;
@@ -21,10 +23,11 @@ public class ProductController : ControllerBase
         _sender = sender;
     }
 
+    [PermissionAuthorize(ProductPermission.View)]
     [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll([FromQuery] ListProductsQuery model)
     {
-        var query = new ListProductsQuery(model.Sort, model.Filter);
+        var query = new ListProductsQuery(model.Filter, model.Pagination);
         var result = await _sender.Send(query);
         return Ok(result);
     }
