@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using ProductService.Domain.Exceptions.Products;
 using SharedLibrary.Wrappers;
 
-namespace ProductService.Domain.Exceptions.Products;
+namespace ProductService.Application.Handlers;
 
 public class ProductExceptionHandler : IExceptionHandler
 {

@@ -1,10 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Mappers;
-using SharedLibrary.CQRS;
 using ProductService.Infrastructure;
 using Serilog;
-using SharedLibrary.Extentions;
 using Hangfire;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using SharedLibrary.Dtos.HealthChecks;
@@ -47,7 +45,7 @@ internal static class HostingExtensions
         builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
         builder.Services.AddControllers();
         builder.Services.AddHttpClient();
-        builder.Services.AddValidatorsFromAssembly(typeof(BaseRequest).Assembly);
+        builder.Services.AddValidatorsFromAssembly(typeof(ProductAutoMapperProfile).Assembly);
         builder.Services.AddAutoMapper(typeof(ProductAutoMapperProfile).Assembly);
 
         // Custom Configuration
