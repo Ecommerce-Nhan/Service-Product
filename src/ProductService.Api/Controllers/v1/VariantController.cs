@@ -18,15 +18,15 @@ public class VariantController : ControllerBase
         _sender = sender;
     }
 
-    [HttpGet("GetVariantListByProductId")]
-    public async Task<IActionResult> GetVariantListByProductId([FromQuery] ListVariantsQuery model)
+    [HttpGet("{productId:guid}/variants")]
+    public async Task<IActionResult> GetVariantListByProductId(Guid productId, [FromQuery] ListVariantsQuery model)
     {
-        var query = new ListVariantsQuery(model.ProductId, model.Filter);
+        var query = new ListVariantsQuery(productId, model.Filter);
         var result = await _sender.Send(query);
         return Ok(result);
     }
 
-    [HttpPost("CreateVariant")]
+    [HttpPost]
     public async Task<IActionResult> CreateVariant([FromBody] CreateVariantDto model)
     {
         var command = new CreateVariantCommand(model);

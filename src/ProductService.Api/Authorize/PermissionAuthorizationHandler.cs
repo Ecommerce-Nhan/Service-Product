@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -14,16 +15,6 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
     }
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
     {
-        var listPermissions = new List<string>
-        {
-            "Permissions.Products.View",
-            "Permissions.Products.Create",
-            "Permissions.Products.Edit",
-            "Permissions.Products.Delete"
-        };
-        var json = JsonSerializer.Serialize(listPermissions);
-        await _redisCache.SetStringAsync($"role_permissions:Admin", json);
-
         if (context.User == null)
         {
             return;

@@ -20,5 +20,6 @@ internal class PermissionPolicyProvider : IAuthorizationPolicyProvider
         }
         return await FallbackPolicyProvider.GetPolicyAsync(policyName);
     }
+
     public async Task<AuthorizationPolicy?> GetFallbackPolicyAsync() => await FallbackPolicyProvider.GetDefaultPolicyAsync();
 }
