@@ -41,10 +41,10 @@ internal static class HostingExtensions
         builder.Host.AddAutoFacConfiguration();
 
         // Default Configuration
-        builder.Services.AddJWTConfiguration(builder.Configuration);
-        builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
         builder.Services.AddControllers();
         builder.Services.AddHttpClient();
+        builder.Services.AddJWTConfiguration(builder.Configuration);
+        builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
         builder.Services.AddValidatorsFromAssembly(typeof(ProductAutoMapperProfile).Assembly);
         builder.Services.AddAutoMapper(typeof(ProductAutoMapperProfile).Assembly);
 
@@ -63,11 +63,11 @@ internal static class HostingExtensions
     {
         app.UseAuthentication();
         app.UseAuthorization();
+        app.MapControllers();
         app.ConfigureDevelopment();
         app.CheckHealthy();
         app.UseSerilogRequestLogging();
         app.UseHttpsRedirection();
-        app.MapControllers();
 
         return app;
     }
@@ -109,10 +109,11 @@ internal static class HostingExtensions
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Product API v1");
                 options.DisplayRequestDuration();
+                options.RoutePrefix = string.Empty;
             });
             app.UseHangfireDashboard();
-
         }
 
         return app;

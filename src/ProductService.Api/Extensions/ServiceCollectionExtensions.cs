@@ -65,19 +65,33 @@ public static class ServiceCollectionExtensions
     }
     public static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
     {
+        services.AddEndpointsApiExplorer();
         services.AddApiVersioning(cfg =>
         {
             cfg.DefaultApiVersion = new ApiVersion(1, 0);
             cfg.AssumeDefaultVersionWhenUnspecified = true;
             cfg.ReportApiVersions = true;
-        });
-        services.AddSwaggerGen(cfg =>
+            cfg.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
+                new HeaderApiVersionReader("x-api-version"),
+                new MediaTypeApiVersionReader("x-api-version"));
+            cfg.UnsupportedApiVersionStatusCode = StatusCodes.Status400BadRequest;
+        }).AddApiExplorer(options =>
         {
-            cfg.SwaggerDoc("v1", new OpenApiInfo { 
-                                     Title = "Product API v1.0", 
-                                     Version = "v1.0", 
-                                     Description = "Development by TTNhan" 
-                                 });
+            options.GroupNameFormat = "'v'VVV";
+            options.SubstituteApiVersionInUrl = true;
+        });
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "Product API v1",
+                Version = "v1",
+                Description = "Development by TTNhan"
+            });
+
+            options.DocInclusionPredicate((docName, apiDesc) =>
+                apiDesc.RelativePath?.Contains($"/v{docName}/") == true
+            );
         });
 
         return services;

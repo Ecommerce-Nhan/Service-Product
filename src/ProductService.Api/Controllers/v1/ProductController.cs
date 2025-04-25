@@ -12,9 +12,9 @@ using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Api.Controllers.v1;
 
+[ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[ApiController]
 public class ProductController : ControllerBase
 {
     private readonly ISender _sender;
