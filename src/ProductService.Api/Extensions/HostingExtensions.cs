@@ -59,15 +59,16 @@ internal static class HostingExtensions
 
         return builder.Build();
     }
+
     public static WebApplication ConfigurePipeline(this WebApplication app, WebApplicationBuilder builder)
     {
-        app.UseAuthentication();
-        app.UseAuthorization();
         app.MapControllers();
         app.ConfigureDevelopment();
         app.CheckHealthy();
         app.UseSerilogRequestLogging();
         app.UseHttpsRedirection();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         return app;
     }
@@ -96,6 +97,7 @@ internal static class HostingExtensions
 
         return app;
     }
+
     private static WebApplication ConfigureDevelopment(this WebApplication app)
     {
         if (!app.Environment.IsProduction())
@@ -109,9 +111,8 @@ internal static class HostingExtensions
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Product API v1");
                 options.DisplayRequestDuration();
-                options.RoutePrefix = string.Empty;
+
             });
             app.UseHangfireDashboard();
         }

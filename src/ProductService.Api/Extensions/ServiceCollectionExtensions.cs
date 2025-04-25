@@ -88,10 +88,6 @@ public static class ServiceCollectionExtensions
                 Version = "v1",
                 Description = "Development by TTNhan"
             });
-
-            options.DocInclusionPredicate((docName, apiDesc) =>
-                apiDesc.RelativePath?.Contains($"/v{docName}/") == true
-            );
         });
 
         return services;
