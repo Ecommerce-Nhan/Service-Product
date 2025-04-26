@@ -112,7 +112,6 @@ internal static class HostingExtensions
             app.UseSwaggerUI(options =>
             {
                 options.DisplayRequestDuration();
-
             });
             app.UseHangfireDashboard();
         }
