@@ -65,6 +65,7 @@ internal static class HostingExtensions
         app.MapControllers();
         app.ConfigureDevelopment();
         app.CheckHealthy();
+        app.UseExceptionHandler("/error");
         app.UseSerilogRequestLogging();
         app.UseHttpsRedirection();
         app.UseAuthentication();
