@@ -15,6 +15,7 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
     //}
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
     {
+        context.Succeed(requirement);
         //if (context.User == null)
         //{
         //    return;

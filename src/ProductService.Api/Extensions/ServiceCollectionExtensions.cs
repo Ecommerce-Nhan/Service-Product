@@ -16,6 +16,7 @@ using ProductService.Application.Features.Products.Commands.Create;
 using ProductService.Application.Handlers;
 using ProductService.Application.Services.S3;
 using ProductService.Domain.Products;
+using ProductService.Domain.Variants;
 using ProductService.Infrastructure;
 using ProductService.Infrastructure.Repositories;
 using SharedLibrary.Repositories.Abtractions;
@@ -52,6 +53,7 @@ public static class ServiceCollectionExtensions
                             .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ProductManager>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<VariantManager>().InstancePerLifetimeScope();
         });
 
         return host;
@@ -173,10 +175,7 @@ public static class ServiceCollectionExtensions
                 IssuerSigningKey = key,
             };
         });
-        services.AddAuthorization(options =>
-        {
-          
-        });
+        services.AddAuthorization();
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
