@@ -1,8 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Logging;
-using System.Security.Claims;
-using System.Text.Json;
 
 namespace ProductService.Api.Authorize;
 public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>

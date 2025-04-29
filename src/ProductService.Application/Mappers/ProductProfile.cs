@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using SharedLibrary.Dtos.Products;
 using ProductService.Domain.Products;
+using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Application.Mappers;
 

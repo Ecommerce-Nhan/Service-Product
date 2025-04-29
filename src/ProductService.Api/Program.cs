@@ -11,7 +11,7 @@ try
         .ConfigurePipeline(builder);
 
     app.Run();
-} 
+}
 catch (Exception ex)
 {
     Log.Fatal(ex, "server terminated unexpectedly");

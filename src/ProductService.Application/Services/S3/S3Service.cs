@@ -49,7 +49,7 @@ public class S3Service : IS3Service
             Expires = expiration,
         };
         urlString = await _s3Client.GetPreSignedURLAsync(request);
-        
+
         return urlString;
     }
 

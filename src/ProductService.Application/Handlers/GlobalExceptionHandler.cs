@@ -14,7 +14,7 @@ public class GlobalExceptionHandler : IExceptionHandler
                                                 Exception exception,
                                                 CancellationToken cancellationToken)
     {
-       
+
         httpContext.Response.StatusCode = exception is BaseException e
                                           ? (int)e.StatusCode
                                           : (int)HttpStatusCode.InternalServerError;

@@ -161,7 +161,7 @@ public static class ServiceCollectionExtensions
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("IxrAjDoa2FqElO7IhrSrUJELhUckePEPVpaePlS_Xaw"));
             o.RequireHttpsMetadata = false;
-            o.SaveToken = true; 
+            o.SaveToken = true;
             o.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,

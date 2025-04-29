@@ -14,7 +14,7 @@ public class ProductManager
                          string code,
                          string? note,
                          decimal costPrice)
-                         //List<string>? images)
+    //List<string>? images)
     {
         var existingEntity = await _repository.FindByCodeAsync(code);
         if (existingEntity != null)

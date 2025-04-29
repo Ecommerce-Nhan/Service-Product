@@ -1,20 +1,20 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
-using System.Text;
 using Serilog;
+using System.Text;
+using System.Text.Json;
 
 namespace ProductService.Application.Behaviors;
 
 public class CachingBehavior<TRequest, TResponse>(IDistributedCache cache) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : ICacheable
 {
-    public async Task<TResponse> Handle(TRequest request, 
-                                        RequestHandlerDelegate<TResponse> next, 
+    public async Task<TResponse> Handle(TRequest request,
+                                        RequestHandlerDelegate<TResponse> next,
                                         CancellationToken cancellationToken)
     {
         TResponse response;
-        if (request.BypassCache) 
+        if (request.BypassCache)
             return await next();
 
         async Task<TResponse> GetResponseAndAddToCache()
