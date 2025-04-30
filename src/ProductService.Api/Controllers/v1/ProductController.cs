@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Api.Authorize;
+using Orchestration.ServiceDefaults.Authorize;
 using ProductService.Application.Features.Products.Commands.Create;
 using ProductService.Application.Features.Products.Commands.Delete;
 using ProductService.Application.Features.Products.Commands.Update;

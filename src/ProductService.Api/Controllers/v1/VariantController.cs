@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Api.Authorize;
+using Orchestration.ServiceDefaults.Authorize;
 using ProductService.Application.Features.Variants.Commands.Create;
 using ProductService.Application.Features.Variants.Queries.GetList;
 using SharedLibrary.Constants.Permission;

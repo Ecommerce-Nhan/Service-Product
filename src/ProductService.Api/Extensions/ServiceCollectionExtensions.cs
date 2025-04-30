@@ -2,26 +2,17 @@
 using Asp.Versioning;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Hangfire;
-using Hangfire.PostgreSql;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
-using ProductService.Api.Authorize;
-using ProductService.Application.Behaviors;
+using Orchestration.ServiceDefaults.Behaviors;
 using ProductService.Application.Features.Products.Commands.Create;
-using ProductService.Application.Handlers;
 using ProductService.Application.Services.S3;
 using ProductService.Domain.Products;
 using ProductService.Domain.Variants;
 using ProductService.Infrastructure;
 using ProductService.Infrastructure.Repositories;
 using SharedLibrary.Repositories.Abtractions;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 namespace ProductService.Api.Extensions;
 
@@ -58,13 +49,7 @@ public static class ServiceCollectionExtensions
 
         return host;
     }
-    public static IServiceCollection AddHandleException(this IServiceCollection services)
-    {
-        services.AddExceptionHandler<ProductExceptionHandler>();
-        services.AddExceptionHandler<GlobalExceptionHandler>();
 
-        return services;
-    }
     public static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
@@ -124,74 +109,6 @@ public static class ServiceCollectionExtensions
         var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
         services.AddDbContext<AppDbContext>(o => o.UseNpgsql(connectionStringBuilder.ConnectionString));
         services.AddDbContext<AppReadOnlyDbContext>(o => o.UseNpgsql(connectionStringBuilder.ConnectionString));
-
-        return services;
-    }
-    public static IServiceCollection AddHangfireConfiguration(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-        services.AddHangfire(x => x
-                        .SetDataCompatibilityLevel(CompatibilityLevel.Version_110)
-                        .UseSimpleAssemblyNameTypeSerializer()
-                        .UseRecommendedSerializerSettings()
-                        .UsePostgreSqlStorage(a =>
-                                              a.UseNpgsqlConnection(connectionString),
-                                              new PostgreSqlStorageOptions
-                                              {
-                                                  QueuePollInterval = TimeSpan.FromSeconds(30),
-                                                  UseNativeDatabaseTransactions = false,
-                                                  DistributedLockTimeout = TimeSpan.FromMinutes(10),
-                                                  InvisibilityTimeout = TimeSpan.FromMinutes(10),
-                                              })
-                        );
-        services.AddHangfireServer();
-
-        return services;
-    }
-    public static IServiceCollection AddJWTConfiguration(this IServiceCollection services, IConfiguration configuration)
-    {
-        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(o =>
-        {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("IxrAjDoa2FqElO7IhrSrUJELhUckePEPVpaePlS_Xaw"));
-            o.RequireHttpsMetadata = false;
-            o.SaveToken = true;
-            o.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero,
-
-                //ValidIssuer = "https://localhost:5001/",
-                //ValidAudience = "b865bfc2-9966-4309-93be-f0dcd2d7c59b",
-                IssuerSigningKey = key,
-            };
-        });
-        services.AddAuthorization();
-        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-        services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
-
-        return services;
-    }
-    public static IServiceCollection AddRedis(this IServiceCollection services)
-    {
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = "RedisCache";
-            options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
-            {
-                AbortOnConnectFail = true,
-                EndPoints = { options.Configuration }
-            };
-        });
 
         return services;
     }
