@@ -1,4 +1,5 @@
 ﻿using Autofac.Core;
+using CategoryService.Application.Handlers;
 using FluentValidation;
 using ProductService.Application.Handlers;
 using ProductService.Application.Mappers;
@@ -24,6 +25,7 @@ internal static partial class HostingExtensions
 
         // Custom Configuration
         builder.Services.AddExceptionHandler<ProductExceptionHandler>();
+        builder.Services.AddExceptionHandler<CategoryExceptionHandler>();
         builder.Services.AddSwaggerConfiguration();
         builder.Services.AddMediatRConfiguration();
         builder.Services.AddAWSConfiguration(builder.Configuration);

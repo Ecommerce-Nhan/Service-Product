@@ -1,20 +1,17 @@
-﻿namespace ProductService.Domain.Products;
+﻿namespace ProductService.Domain.Categories;
 
-public class Product : BaseEntity
+public class Category : BaseEntity
 {
-    public Guid CategoryId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Code { get; set; } = string.Empty;
-    public string? Note { get; set; }
-    public decimal CostPrice { get; set; }
-    public List<string>? Images { get; set; }
+    public string? Description { get; set; }
 
-    internal Product ChangeCode(string code)
+    internal Category ChangeCode(string code)
     {
         SetCode(code);
         return this;
     }
-    internal Product ChangeName(string name)
+    internal Category ChangeName(string name)
     {
         SetName(name);
         return this;
