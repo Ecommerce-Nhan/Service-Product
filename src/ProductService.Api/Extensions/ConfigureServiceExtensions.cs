@@ -1,5 +1,4 @@
-﻿using Autofac.Core;
-using CategoryService.Application.Handlers;
+﻿using CategoryService.Application.Handlers;
 using FluentValidation;
 using ProductService.Application.Handlers;
 using ProductService.Application.Mappers;
@@ -31,6 +30,8 @@ internal static partial class HostingExtensions
         builder.Services.AddAWSConfiguration(builder.Configuration);
         builder.Services.AddDatabaseConfiguration(builder.Configuration);
         builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
+        builder.Services.AddAuthentication();
+        builder.Services.AddAuthorization();
 
         return builder.Build();
     }
