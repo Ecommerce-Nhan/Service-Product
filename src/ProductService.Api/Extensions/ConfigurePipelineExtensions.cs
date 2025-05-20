@@ -17,7 +17,6 @@ internal static partial class HostingExtensions
         app.CheckHealthy();
         app.UseExceptionHandler("/error");
         app.UseSerilogRequestLogging();
-        app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
 
