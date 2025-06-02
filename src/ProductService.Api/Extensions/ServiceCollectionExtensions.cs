@@ -2,6 +2,7 @@
 using Asp.Versioning;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CategoryService.Domain.Categories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Npgsql;
@@ -45,6 +46,7 @@ public static class ServiceCollectionExtensions
 
             containerBuilder.RegisterType<ProductManager>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<VariantManager>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<CategoryManager>().InstancePerLifetimeScope();
         });
 
         return host;
@@ -75,6 +77,33 @@ public static class ServiceCollectionExtensions
                 Version = "v1",
                 Description = "Development by TTNhan"
             });
+
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Description = "Enter 'Bearer {token}'",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            };
+
+            options.AddSecurityDefinition("Bearer", securityScheme);
+
+            var securityRequirement = new OpenApiSecurityRequirement
+            {
+                {
+                    securityScheme,
+                    Array.Empty<string>()
+                }
+            };
+
+            options.AddSecurityRequirement(securityRequirement);
         });
 
         return services;

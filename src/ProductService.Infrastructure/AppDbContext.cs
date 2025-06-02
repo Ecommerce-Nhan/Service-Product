@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProductService.Domain.Categories;
 using ProductService.Domain.Products;
 using ProductService.Domain.Variants;
 
@@ -18,6 +19,7 @@ public class AppDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
+    public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Variant> Variants { get; set; }
 }

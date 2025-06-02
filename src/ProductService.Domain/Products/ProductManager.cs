@@ -10,7 +10,8 @@ public class ProductManager
     {
         _repository = repository;
     }
-    public async Task<Product> CreateAsync(string name,
+    public async Task<Product> CreateAsync(Guid categoryId,
+                         string name,
                          string code,
                          string? note,
                          decimal costPrice)
@@ -29,6 +30,7 @@ public class ProductManager
 
         return new Product
         {
+            CategoryId = categoryId,
             Name = name,
             Code = code,
             Note = note,

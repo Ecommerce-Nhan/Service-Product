@@ -22,6 +22,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     {
         var input = command.Model;
         var product = await _manager.CreateAsync(
+                                input.CategoryId,
                                 input.Name,
                                 input.Code,
                                 input.Note,
