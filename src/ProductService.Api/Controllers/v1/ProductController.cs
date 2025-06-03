@@ -1,20 +1,20 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Api.Authorize;
+using Orchestration.ServiceDefaults.Authorize;
 using ProductService.Application.Features.Products.Commands.Create;
 using ProductService.Application.Features.Products.Commands.Delete;
 using ProductService.Application.Features.Products.Commands.Update;
 using ProductService.Application.Features.Products.Queries.GetById;
 using ProductService.Application.Features.Products.Queries.GetList;
-using ProductService.Application.Permissions;
+using SharedLibrary.Constants.Permission;
 using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Api.Controllers.v1;
 
+[ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[ApiController]
 public class ProductController : ControllerBase
 {
     private readonly ISender _sender;
@@ -23,15 +23,16 @@ public class ProductController : ControllerBase
         _sender = sender;
     }
 
-    [PermissionAuthorize(ProductPermission.View)]
-    [HttpGet("GetAll")]
+    [PermissionAuthorize(Permissions.Products.View)]
+    [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] ListProductsQuery model)
     {
-        var query = new ListProductsQuery(model.Filter, model.Pagination);
+        var query = new ListProductsQuery(model.Pagination);
         var result = await _sender.Send(query);
         return Ok(result);
     }
 
+    [PermissionAuthorize(Permissions.Products.Create)]
     [HttpPost]
     public async Task<IActionResult> Post([FromForm] CreateProductDto model)
     {
@@ -40,6 +41,7 @@ public class ProductController : ControllerBase
         return Ok(result);
     }
 
+    [PermissionAuthorize(Permissions.Products.Edit)]
     [HttpPut]
     public async Task<IActionResult> Put([FromForm] UpdateProductDto model)
     {
@@ -48,6 +50,7 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
+    [PermissionAuthorize(Permissions.Products.Delete)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -56,8 +59,9 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("GetById")]
-    public async Task<IActionResult> GetById([FromQuery] Guid id)
+    [PermissionAuthorize(Permissions.Products.View)]
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
     {
         var query = new GetProductQuery(id);
         var result = await _sender.Send(query);

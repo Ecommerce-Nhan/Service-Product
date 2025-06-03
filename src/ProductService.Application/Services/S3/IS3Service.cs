@@ -1,6 +1,4 @@
-﻿using Amazon.S3.Model;
-
-namespace ProductService.Application.Services.S3;
+﻿namespace ProductService.Application.Services.S3;
 
 public interface IS3Service
 {

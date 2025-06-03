@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ProductService.Domain.Variants;
 using SharedLibrary.Dtos.Variants;
 using SharedLibrary.Filters;
 using SharedLibrary.Wrappers;
-using Microsoft.EntityFrameworkCore;
 
 namespace ProductService.Application.Features.Variants.Queries.GetList;
 

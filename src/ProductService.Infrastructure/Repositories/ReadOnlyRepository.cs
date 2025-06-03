@@ -10,7 +10,7 @@ public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
     public ReadOnlyRepository(AppReadOnlyDbContext context)
     {
         Queryable = context.Set<T>()
-                           .Where(x => EF.Property<DateTime?>(x, nameof(BaseEntity.DeletedAt)) 
+                           .Where(x => EF.Property<DateTime?>(x, nameof(BaseEntity.DeletedAt))
                                        == null);
     }
     public async Task<T?> GetByIdAsync(Guid id)

@@ -1,8 +1,10 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Orchestration.ServiceDefaults.Authorize;
 using ProductService.Application.Features.Variants.Commands.Create;
 using ProductService.Application.Features.Variants.Queries.GetList;
+using SharedLibrary.Constants.Permission;
 using SharedLibrary.Dtos.Variants;
 
 namespace ProductService.Api.Controllers.v1;
@@ -18,20 +20,21 @@ public class VariantController : ControllerBase
         _sender = sender;
     }
 
-    [HttpGet("GetVariantListByProductId")]
-    public async Task<IActionResult> GetVariantListByProductId([FromQuery] ListVariantsQuery model)
+    [PermissionAuthorize(Permissions.Products.View)]
+    [HttpGet("{productId:guid}")]
+    public async Task<IActionResult> GetListByProductId(Guid productId, [FromQuery] ListVariantsQuery model)
     {
-        var query = new ListVariantsQuery(model.ProductId, model.Filter);
+        var query = new ListVariantsQuery(productId, model.Filter);
         var result = await _sender.Send(query);
         return Ok(result);
     }
 
-    [HttpPost("CreateVariant")]
-    public async Task<IActionResult> CreateVariant([FromBody] CreateVariantDto model)
+    [PermissionAuthorize(Permissions.Products.Edit)]
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateVariantDto model)
     {
         var command = new CreateVariantCommand(model);
         var result = await _sender.Send(command);
         return Ok(result);
     }
-
 }

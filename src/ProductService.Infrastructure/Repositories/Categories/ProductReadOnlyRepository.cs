@@ -1,33 +1,36 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductService.Domain.Products;
+using CategoryService.Domain.Categories;
 using SharedLibrary.Filters;
 using SharedLibrary.Wrappers;
+using ProductService.Infrastructure.Repositories;
+using ProductService.Domain.Categories;
+using ProductService.Infrastructure;
 
-namespace ProductService.Infrastructure.Repositories.Products;
+namespace CategoryService.Infrastructure.Repositories.Categories;
 
-public class ProductReadOnlyRepository : ReadOnlyRepository<Product>, IProductReadOnlyRepository
+public class CategoryReadOnlyRepository : ReadOnlyRepository<Category>, ICategoryReadOnlyRepository
 {
-    public ProductReadOnlyRepository(AppReadOnlyDbContext context) : base(context)
+    public CategoryReadOnlyRepository(AppReadOnlyDbContext context) : base(context)
     {
 
     }
-    public async Task<Product?> FindByCodeAsync(string code)
+    public async Task<Category?> FindByCodeAsync(string code)
     {
         return await Queryable.FirstOrDefaultAsync(x => x.Code == code);
     }
-    public async Task<Product?> FindByNameAsync(string name)
+    public async Task<Category?> FindByNameAsync(string name)
     {
         return await Queryable.FirstOrDefaultAsync(x => x.Name == name);
     }
 
-    public async Task<PagedResponse<List<Product>>> GetPageAsync(PaginationFilter pageFilter)
+    public async Task<PagedResponse<List<Category>>> GetPageAsync(PaginationFilter pageFilter)
     {
         var validFilter = new PaginationFilter(pageFilter.PageNumber, pageFilter.PageSize);
         var pagedData = await Queryable.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                                        .Take(validFilter.PageSize)
                                        .ToListAsync();
         var totalRecords = await Queryable.CountAsync();
-        var response = new PagedResponse<List<Product>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
+        var response = new PagedResponse<List<Category>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
 
         var totalPages = ((double)totalRecords / validFilter.PageSize);
         response.TotalPages = Convert.ToInt32(Math.Ceiling(totalPages));

@@ -1,8 +1,8 @@
-﻿using MediatR;
-using AutoMapper;
-using SharedLibrary.Dtos.Products;
-using ProductService.Domain.Products;
+﻿using AutoMapper;
+using MediatR;
 using ProductService.Domain.Exceptions.Products;
+using ProductService.Domain.Products;
+using SharedLibrary.Dtos.Products;
 
 namespace ProductService.Application.Features.Products.Queries.GetById;
 

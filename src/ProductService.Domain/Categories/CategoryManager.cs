@@ -1,45 +1,41 @@
-﻿using ProductService.Domain.Exceptions.Products;
+﻿using CategoryService.Domain.Exceptions.Categories;
+using ProductService.Domain.Categories;
 using SharedLibrary.Exceptions;
 
-namespace ProductService.Domain.Products;
+namespace CategoryService.Domain.Categories;
 
-public class ProductManager
+public class CategoryManager
 {
-    private readonly IProductReadOnlyRepository _repository;
-    public ProductManager(IProductReadOnlyRepository repository)
+    private readonly ICategoryReadOnlyRepository _repository;
+    public CategoryManager(ICategoryReadOnlyRepository repository)
     {
         _repository = repository;
     }
-    public async Task<Product> CreateAsync(Guid categoryId,
-                         string name,
+    public async Task<Category> CreateAsync(string name,
                          string code,
-                         string? note,
-                         decimal costPrice)
+                         string? description)
     //List<string>? images)
     {
         var existingEntity = await _repository.FindByCodeAsync(code);
         if (existingEntity != null)
         {
-            throw new ProductExistException(code);
+            throw new CategoryExistException(code);
         }
         existingEntity = await _repository.FindByNameAsync(name);
         if (existingEntity != null)
         {
-            throw new ProductExistException(name, true);
+            throw new CategoryExistException(name, true);
         }
 
-        return new Product
+        return new Category
         {
-            CategoryId = categoryId,
             Name = name,
             Code = code,
-            Note = note,
-            CostPrice = costPrice,
-            //Images = images
+            Description = description
         };
     }
 
-    public async Task ChangeCodeAsync(Product product, string newCode)
+    public async Task ChangeCodeAsync(Category product, string newCode)
     {
         if (string.IsNullOrEmpty(newCode) || string.IsNullOrWhiteSpace(newCode))
         {
@@ -49,13 +45,13 @@ public class ProductManager
         var existingEntity = await _repository.FindByCodeAsync(newCode);
         if (existingEntity != null && existingEntity.Id != product.Id)
         {
-            throw new ProductExistException(newCode, false);
+            throw new CategoryExistException(newCode, false);
         }
 
         product.ChangeCode(newCode);
     }
 
-    public async Task ChangeNameAsync(Product product, string newName)
+    public async Task ChangeNameAsync(Category product, string newName)
     {
         if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
         {
@@ -65,7 +61,7 @@ public class ProductManager
         var existingEntity = await _repository.FindByNameAsync(newName);
         if (existingEntity != null && existingEntity.Id != product.Id)
         {
-            throw new ProductExistException(newName, true);
+            throw new CategoryExistException(newName, true);
         }
 
         product.ChangeName(newName);

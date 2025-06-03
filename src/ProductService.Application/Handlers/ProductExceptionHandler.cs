@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using ProductService.Domain.Exceptions.Products;
+using SharedLibrary.Response.Identity;
 using SharedLibrary.Wrappers;
 
-namespace ProductService.Domain.Exceptions.Products;
+namespace ProductService.Application.Handlers;
 
 public class ProductExceptionHandler : IExceptionHandler
 {
@@ -21,13 +23,7 @@ public class ProductExceptionHandler : IExceptionHandler
                                                   Exception exception,
                                                   CancellationToken cancellationToken)
     {
-        var response = new Response<object>
-        {
-            Succeeded = false,
-            Data = null,
-            Errors = new[] { exception.Message },
-            Message = "Invalid request",
-        };
+        var response = await Response<PermissionResponse>.FailAsync(new List<string> { exception.Message });
         httpContext.Response.StatusCode = (int)((dynamic)exception).StatusCode;
         await httpContext.Response.WriteAsJsonAsync(response, cancellationToken)
                                   .ConfigureAwait(false);
