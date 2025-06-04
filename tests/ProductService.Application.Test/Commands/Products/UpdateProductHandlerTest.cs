@@ -15,8 +15,9 @@ public class UpdateProductHandlerTest
     private readonly UpdateProductCommandHandler _handler;
 
     private static readonly Guid productID = Guid.NewGuid();
+    private static readonly Guid categoryID = Guid.NewGuid();
     private static readonly UpdateProductDto input
-        = new UpdateProductDto(productID, "name", "code", null, 10, new List<IFormFile>());
+        = new UpdateProductDto(productID, categoryID, "name", "code", null, 10, new List<IFormFile>());
 
     public UpdateProductHandlerTest()
     {
@@ -41,7 +42,7 @@ public class UpdateProductHandlerTest
     public async Task Handle_ProductNameChanged_CallsChangeNameAsync()
     {
         // Arrange
-        var input = new UpdateProductDto(productID, "NewName", "code", null, 10, new List<IFormFile>());
+        var input = new UpdateProductDto(productID, categoryID, "NewName", "code", null, 10, new List<IFormFile>());
         var command = new UpdateProductCommand(input);
         var product = new Product { Id = productID, Name = "OldName" };
 

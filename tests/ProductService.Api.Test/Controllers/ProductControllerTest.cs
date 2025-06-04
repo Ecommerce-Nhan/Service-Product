@@ -21,7 +21,9 @@ public class ProductControllerTest
     {
         // Arrange
         var productId = Guid.NewGuid();
-        var mockProduct = new ProductDto(productId, "Test Product", "105065", "note", 10000, new List<string>());
+        var categoryId = Guid.NewGuid();
+
+        var mockProduct = new ProductDto(productId, categoryId, "Test Product", "105065", "note", 10000, new List<string>());
         _mockSender.Setup(sender => sender.Send(It.IsAny<GetProductQuery>(), default))
             .ReturnsAsync(mockProduct);
 
