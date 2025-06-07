@@ -16,25 +16,17 @@ The **Product Service** is a .NET-based microservice designed to manage product-
 
 ## Architecture
 
-### Components
-1. **AWS CloudWatch** - Monitors the service and logs application events.
-2. **AWS CloudFront** - Serves images from the S3 bucket as a CDN for faster delivery.
-3. **AWS Lambda** - Triggers and resizes images uploaded to the S3 bucket.
-4. **AWS S3** - Stores images uploaded by the Product Service.
-5. **Hangfire** - Manages background jobs like uploading images to S3.
-6. **PostgreSQL** - Stores product metadata.
-7. **ECS Cluster** - Hosts the containerized Product Service.
-8. **GitHub Actions** - Automates CI/CD pipeline for build, test, and deployment.
-
 ### Workflow
-1. Product metadata is stored in **PostgreSQL**.
-2. Image files are uploaded to **AWS S3** via the Product Service.
-3. **AWS Lambda** resizes images upon upload and updates the S3 bucket.
-4. Images are served via **AWS CloudFront** for optimized delivery.
-5. **Hangfire** schedules and executes image uploads and other background tasks.
-6. Logs and metrics are monitored in **AWS CloudWatch**.
+1.	Built with .NET Core 9, implementing Domain Driven Design, Clean Architectural.
+2.	Uses Amazon RDS cluster to support scalable, distributed read replicas for CQRS query handlers.
+3.	Supports asynchronous image upload via Hangfire for non-blocking job processing.
+4.	Images are uploaded to Amazon S3, resized by AWS Lambda (triggered via SQS)
+and served via CloudFront CDN to increase performance.
+5.	Logging via Serilog, observability handled via AWS CloudWatch.
+6.	Integrate unit testing xUnit, Moq, Nsubtitute.
+7.	**GitHub Actions** - Automates CI/CD pipeline for build, test, and deployment.
 
-![Product Service Architecture](https://github.com/user-attachments/assets/00e3ed2b-5af8-4ae5-bb50-225bbf896bb6)
+![system-design](https://github.com/user-attachments/assets/e1ad1ebe-1c6a-43d8-9487-2616c3aff447)
 
 ---
 
