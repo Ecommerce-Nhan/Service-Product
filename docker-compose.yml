@@ -1,0 +1,35 @@
+name: product-service
+services:
+  api:
+    image: product-service-api:latest
+    container_name: Api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GITHUB_USERNAME: ${GITHUB_USERNAME}
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+    ports:
+      - "8084:8084"
+      - "8091:443"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    image: postgres:latest
+    container_name: Database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: productDB
+    ports:
+      - "5435:5432"
+    # volumes:
+    #   - D:\Docker\Data\Postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
