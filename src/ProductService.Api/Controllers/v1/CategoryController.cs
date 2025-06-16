@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Orchestration.ServiceDefaults.Authorize;
 using ProductService.Application.Features.Categories.Queries.GetList;
-using ProductService.Application.Features.Products.Commands.Create;
 using SharedLibrary.Constants.Permission;
 using SharedLibrary.Dtos.Categories;
 
@@ -12,8 +11,8 @@ namespace ProductService.Api.Controllers.v1;
 
 [ApiController]
 [ApiVersion("1.0")]
-[Route("api/v{version:apiVersion}/[controller]")]
-public class CategoryController : Controller
+[Route("api/v{version:apiVersion}/product/[controller]")]
+public class CategoryController : ControllerBase
 {
     private readonly ISender _sender;
     public CategoryController(ISender sender)

@@ -10,7 +10,7 @@ using SharedLibrary.Dtos.Variants;
 namespace ProductService.Api.Controllers.v1;
 
 [ApiVersion("1.0")]
-[Route("api/v{version:apiVersion}/[controller]")]
+[Route("api/v{version:apiVersion}/product/[controller]")]
 [ApiController]
 public class VariantController : ControllerBase
 {
