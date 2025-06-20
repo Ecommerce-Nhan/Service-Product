@@ -24,7 +24,7 @@ internal static partial class HostingExtensions
     }
     private static WebApplication CheckHealthy(this WebApplication app)
     {
-        app.UseHealthChecks("/api/product/health", new HealthCheckOptions
+        app.UseHealthChecks("/api/v1/product/health", new HealthCheckOptions
         {
             ResponseWriter = async (context, report) =>
             {
