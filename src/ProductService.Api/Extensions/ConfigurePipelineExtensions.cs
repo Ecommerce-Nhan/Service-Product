@@ -12,9 +12,10 @@ internal static partial class HostingExtensions
 {
     public static WebApplication ConfigurePipeline(this WebApplication app, WebApplicationBuilder builder)
     {
+        app.CheckHealthy();
+        app.UseCors("AllowAll");
         app.MapControllers();
         app.ConfigureDevelopment();
-        app.CheckHealthy();
         app.UseExceptionHandler("/error");
         app.UseSerilogRequestLogging();
         app.UseAuthentication();
