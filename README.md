@@ -26,7 +26,8 @@ and served via CloudFront CDN to increase performance.
 6.	Integrate unit testing xUnit, Moq, Nsubtitute.
 7.	**GitHub Actions** - Automates CI/CD pipeline for build, test, and deployment.
 
-![system-design](https://github.com/user-attachments/assets/e1ad1ebe-1c6a-43d8-9487-2616c3aff447)
+### System Design
+![diagram-export-6-29-2025-10_53_34-AM](https://github.com/user-attachments/assets/799636f9-5209-4a1b-974d-34f6c59885c4)
 
 ---
 
