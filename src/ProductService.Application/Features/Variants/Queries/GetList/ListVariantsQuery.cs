@@ -7,15 +7,12 @@ namespace ProductService.Application.Features.Variants.Queries.GetList;
 
 public class ListVariantsQuery : IRequest<PagedResponse<List<VariantDto>>>
 {
-    public Guid ProductId { get; set; }
-    public PaginationFilter Filter { get; set; } = new();
+    public PaginationFilter Pagination { get; set; } = new();
     public ListVariantsQuery()
     {
     }
-    public ListVariantsQuery(Guid productId,
-                               PaginationFilter filter)
+    public ListVariantsQuery(PaginationFilter pagination)
     {
-        ProductId = productId;
-        Filter = filter;
+        Pagination = pagination;
     }
 }

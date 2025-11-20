@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using ProductService.Domain.Variants;
+using System.Text.Json;
 
 namespace ProductService.Application.Features.Variants.Commands.Create;
 
@@ -23,7 +24,7 @@ public class CreateVariantCommandHandler : IRequestHandler<CreateVariantCommand,
                 input.UnitPrice,
                 input.Quantity,
                 input.MainImage,
-                input.Attributes
+                JsonSerializer.Serialize(input.Attributes)
             );
         await _repository.AddAsync(variant);
 
