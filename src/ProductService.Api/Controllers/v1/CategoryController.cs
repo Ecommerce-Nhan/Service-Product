@@ -1,8 +1,11 @@
 ﻿using Asp.Versioning;
-using CategoryService.Application.Features.Categories.Commands.Create;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Orchestration.ServiceDefaults.Authorize;
+using ProductService.Application.Features.Categories.Commands.Create;
+using ProductService.Application.Features.Categories.Commands.Delete;
+using ProductService.Application.Features.Categories.Commands.Update;
+using ProductService.Application.Features.Categories.Queries.GetById;
 using ProductService.Application.Features.Categories.Queries.GetList;
 using SharedLibrary.Constants.Permission;
 using SharedLibrary.Dtos.Categories;
@@ -29,12 +32,39 @@ public class CategoryController : ControllerBase
         return Ok(result);
     }
 
-    //[PermissionAuthorize(Permissions.Categories.View)]
+    [PermissionAuthorize(Permissions.Categories.Edit)]
     [HttpPost]
-    public async Task<IActionResult> Create([FromQuery] CreateCategoryDto model)
+    public async Task<IActionResult> Create([FromBody] CreateCategoryDto model)
     {
         var command = new CreateCategoryCommand(model);
         var result = await _sender.Send(command);
+        return Ok(result);
+    }
+
+    [PermissionAuthorize(Permissions.Categories.Edit)]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateCategoryDto model)
+    {
+        var command = new UpdateCategoryCommand(id, model);
+        await _sender.Send(command);
+        return NoContent();
+    }
+
+    [PermissionAuthorize(Permissions.Categories.Delete)]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var command = new DeleteCategoryCommand(id);
+        await _sender.Send(command);
+        return NoContent();
+    }
+
+    [PermissionAuthorize(Permissions.Categories.View)]
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var query = new GetCategoryQuery(id);
+        var result = await _sender.Send(query);
         return Ok(result);
     }
 }

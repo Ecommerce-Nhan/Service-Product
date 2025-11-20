@@ -1,7 +1,7 @@
 using CategoryService.Domain.Categories;
 using MediatR;
 
-namespace CategoryService.Application.Features.Categories.Commands.Create;
+namespace ProductService.Application.Features.Categories.Commands.Create;
 
 public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Guid>
 {
