@@ -23,7 +23,7 @@ public class CategoryExceptionHandler : IExceptionHandler
                                                   Exception exception,
                                                   CancellationToken cancellationToken)
     {
-        var response = await Response<PermissionResponse>.FailAsync(new List<string> { exception.Message });
+        var response = await Response<Response>.FailAsync(new List<string> { exception.Message });
         httpContext.Response.StatusCode = (int)((dynamic)exception).StatusCode;
         await httpContext.Response.WriteAsJsonAsync(response, cancellationToken)
                                   .ConfigureAwait(false);
