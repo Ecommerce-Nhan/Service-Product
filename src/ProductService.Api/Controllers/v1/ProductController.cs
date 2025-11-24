@@ -9,6 +9,7 @@ using ProductService.Application.Features.Products.Queries.GetById;
 using ProductService.Application.Features.Products.Queries.GetList;
 using SharedLibrary.Constants.Permission;
 using SharedLibrary.Dtos.Products;
+using SharedLibrary.Filters;
 
 namespace ProductService.Api.Controllers.v1;
 
@@ -25,9 +26,9 @@ public class ProductController : ControllerBase
 
     [PermissionAuthorize(Permissions.Products.View)]
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] ListProductsQuery model)
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter pagination)
     {
-        var query = new ListProductsQuery(model.Pagination);
+        var query = new ListProductsQuery(pagination);
         var result = await _sender.Send(query);
         return Ok(result);
     }

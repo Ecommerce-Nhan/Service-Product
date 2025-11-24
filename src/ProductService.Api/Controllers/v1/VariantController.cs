@@ -26,9 +26,9 @@ public class VariantController : ControllerBase
 
     [PermissionAuthorize(Permissions.Products.View)]
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] ListVariantsQuery model)
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter pagination)
     {
-        var query = new ListVariantsQuery(model.Pagination);
+        var query = new ListVariantsQuery(pagination);
         var result = await _sender.Send(query);
         return Ok(result);
     }
