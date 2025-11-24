@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Orchestration.ServiceDefaults.Authorize;
 using ProductService.Application.Features.Products.Commands.Create;
@@ -24,7 +25,7 @@ public class ProductController : ControllerBase
         _sender = sender;
     }
 
-    [PermissionAuthorize(Permissions.Products.View)]
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] PaginationFilter pagination)
     {
@@ -60,7 +61,7 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
-    [PermissionAuthorize(Permissions.Products.View)]
+    [AllowAnonymous]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
