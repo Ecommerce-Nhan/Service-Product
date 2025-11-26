@@ -36,7 +36,7 @@ public class ProductController : ControllerBase
 
     [PermissionAuthorize(Permissions.Products.Create)]
     [HttpPost]
-    public async Task<IActionResult> Post([FromForm] CreateProductDto model)
+    public async Task<IActionResult> Post([FromBody] CreateProductDto model)
     {
         var command = new CreateProductCommand(model);
         var result = await _sender.Send(command);
@@ -45,7 +45,7 @@ public class ProductController : ControllerBase
 
     [PermissionAuthorize(Permissions.Products.Edit)]
     [HttpPut]
-    public async Task<IActionResult> Put([FromForm] UpdateProductDto model)
+    public async Task<IActionResult> Put([FromBody] UpdateProductDto model)
     {
         var command = new UpdateProductCommand(model);
         await _sender.Send(command);

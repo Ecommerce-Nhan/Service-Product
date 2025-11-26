@@ -29,7 +29,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
                                 input.CostPrice
                             );
 
-        await _mediatR.Publish(new ProductCreatedNotification(input, product));
+        //await _mediatR.Publish(new ProductCreatedNotification(input, product));
         await _repository.AddAsync(product);
         return product.Id;
     }
