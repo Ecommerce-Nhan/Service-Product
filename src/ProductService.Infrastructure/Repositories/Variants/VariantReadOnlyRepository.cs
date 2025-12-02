@@ -17,12 +17,12 @@ public class VariantReadOnlyRepository : ReadOnlyRepository<Variant>, IVariantRe
         return await Queryable.FirstOrDefaultAsync(x => x.SKU == sku);
     }
 
-    public async Task<PagedResponse<List<Variant>>> GetPageAsync(PaginationFilter pageFilter)
+    public async Task<PagedResponse<List<Variant>>> GetPageAsync(PageRequest pageFilter)
     {
         return await Queryable.ToPagedResponseListAsync(pageFilter);
     }
 
-    public async Task<PagedResponse<List<Variant>>> GetPageByProductIdAsync(Guid productId, PaginationFilter pageFilter)
+    public async Task<PagedResponse<List<Variant>>> GetPageByProductIdAsync(Guid productId, PageRequest pageFilter)
     {
         return await Queryable.Where(x => x.ProductId == productId).ToPagedResponseListAsync(pageFilter);
     }

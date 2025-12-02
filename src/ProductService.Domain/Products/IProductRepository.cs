@@ -10,5 +10,5 @@ public interface IProductReadOnlyRepository : IReadOnlyRepository<Product>
 {
     Task<Product?> FindByCodeAsync(string code);
     Task<Product?> FindByNameAsync(string name);
-    Task<PagedResponse<List<Product>>> GetPageAsync(PaginationFilter pageFilter);
+    Task<PagedResponse<List<Product>>> GetPageAsync(PageRequest pageFilter);
 }

@@ -27,7 +27,7 @@ public class VariantController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter pagination)
+    public async Task<IActionResult> GetAll([FromQuery] PageRequest pagination)
     {
         var query = new ListVariantsQuery(pagination);
         var result = await _sender.Send(query);
@@ -63,7 +63,7 @@ public class VariantController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("{productId:guid}")]
-    public async Task<IActionResult> GetByProductId(Guid productId, [FromQuery] PaginationFilter pagination)
+    public async Task<IActionResult> GetByProductId(Guid productId, [FromQuery] PageRequest pagination)
     {
         var query = new ListVariantsByProductIdQuery(pagination, productId);
         var result = await _sender.Send(query);

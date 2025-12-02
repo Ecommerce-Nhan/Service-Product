@@ -27,7 +27,7 @@ public class ProductController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter pagination)
+    public async Task<IActionResult> GetAll([FromQuery] PageRequest pagination)
     {
         var query = new ListProductsQuery(pagination);
         var result = await _sender.Send(query);

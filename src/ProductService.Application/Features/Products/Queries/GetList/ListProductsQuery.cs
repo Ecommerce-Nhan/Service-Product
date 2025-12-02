@@ -7,11 +7,11 @@ namespace ProductService.Application.Features.Products.Queries.GetList;
 
 public class ListProductsQuery : IRequest<PagedResponse<List<ProductDto>>>
 {
-    public PaginationFilter Pagination { get; set; } = new();
+    public PageRequest Pagination { get; set; } = new();
     public ListProductsQuery()
     {
     }
-    public ListProductsQuery(PaginationFilter pagination)
+    public ListProductsQuery(PageRequest pagination)
     {
         Pagination = pagination;
     }

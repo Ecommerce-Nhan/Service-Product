@@ -11,5 +11,5 @@ public interface ICategoryReadOnlyRepository : IReadOnlyRepository<Category>
 {
     Task<Category?> FindByCodeAsync(string code);
     Task<Category?> FindByNameAsync(string name);
-    Task<PagedResponse<List<Category>>> GetPageAsync(PaginationFilter pageFilter);
+    Task<PagedResponse<List<Category>>> GetPageAsync(PageRequest pageFilter);
 }

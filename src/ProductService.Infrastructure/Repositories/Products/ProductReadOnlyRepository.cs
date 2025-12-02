@@ -21,7 +21,7 @@ public class ProductReadOnlyRepository : ReadOnlyRepository<Product>, IProductRe
         return await Queryable.FirstOrDefaultAsync(x => x.Name == name);
     }
 
-    public async Task<PagedResponse<List<Product>>> GetPageAsync(PaginationFilter pageFilter)
+    public async Task<PagedResponse<List<Product>>> GetPageAsync(PageRequest pageFilter)
     {
         return await Queryable.ToPagedResponseListAsync(pageFilter);
     }

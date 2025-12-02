@@ -24,7 +24,7 @@ public class CategoryReadOnlyRepository : ReadOnlyRepository<Category>, ICategor
         return await Queryable.FirstOrDefaultAsync(x => x.Name == name);
     }
 
-    public async Task<PagedResponse<List<Category>>> GetPageAsync(PaginationFilter pageFilter)
+    public async Task<PagedResponse<List<Category>>> GetPageAsync(PageRequest pageFilter)
     {
         return await Queryable.ToPagedResponseListAsync(pageFilter);
     }
